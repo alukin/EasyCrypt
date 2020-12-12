@@ -1,0 +1,4 @@
+#!/bin/bash
+VERSION=1.0.0
+JAR_PATH=./target/easycryptutil-${VERSION}-jar-with-dependencies.jar
+java -jar ${JAR_PATH} $@
