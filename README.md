@@ -44,7 +44,7 @@ If you know some other tools that can produce WebAssembly code from Java bytecod
 
 ### GIT branches ###
 
-* ___master___: latest stable version
+* ___main___: latest stable version
 * ___develop___: latest development version
 * ___feature/FETURE_NAME___ - new feature development to be merged with develop branch when complete
 anches contain code supposed to be merget to develop branch
