@@ -34,11 +34,7 @@ Current release is 1.0.0 amd contains Java code only.
 
 ### How do I get set up? ###
 
-* Java requirements: JDK 11 or up to 16 for pure Java usage. GraalVM 20.0.3 or later for C++ and JavaScript wrappers.
-* Maven 3.6.0 or later
-* BouncyCastle crypto library ( loaded authmatically as Maven dependency)
-* JavaScript: NodeJS v.14 or later
-* C/C++: gcc v.10 or LLVM CLang v.10 or later,  CMake 3.8.0 or later
+* Java requirements: JDK 11 or up to 16 for pure Java usage. GraalVM 20.0.3 or later for native image builds
 
 ### Experimantal stuff
 
