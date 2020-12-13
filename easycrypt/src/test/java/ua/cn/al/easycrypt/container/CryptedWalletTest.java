@@ -20,12 +20,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import ua.cn.al.easycrypt.TestBase;
 
 /**
  *
  * @author Oleksiy Lukin alukin@gmail.com
  */
-public class CryptedWalletTest {
+public class CryptedWalletTest extends TestBase {
     private static String OUT_WALLET_FILE = "testdata/out/WalletTest.bin";
     private static NotRandom nr = new NotRandom();
     private static byte[] NR_SEED={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,33,24,25,26,27,28,29,30,31};
@@ -37,6 +38,7 @@ public class CryptedWalletTest {
     
     @BeforeAll
     public static void setUpClass() {
+        TestBase.mkdirs("testdata/out");
         nr.setSeed(NR_SEED);
     }
     

@@ -28,10 +28,8 @@ import java.security.PrivateKey;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.io.FileOutputStream;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -47,7 +45,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author Oleksiy Lukin alukin@gmail.com
  */
-public class AsymFBCryptoECCTest {
+public class AsymFBCryptoECCTest extends TestBase{
 
     private static KeyPair kpAlice;
     private static KeyPair kpBob;
@@ -72,28 +70,11 @@ public class AsymFBCryptoECCTest {
     
     private static final CryptoParams params = CryptoConfig.createDefaultParams();
     
+    
     public AsymFBCryptoECCTest() {
     }
+    
 
-    private static void writeToFile(ByteBuffer data, String fileName) throws IOException {
-        try (FileChannel out = new FileOutputStream(fileName).getChannel()) {
-            data.rewind();
-            out.write(data);
-        }
-    }
-
-    private static ByteBuffer readFromFile(String fileName) throws IOException {
-        FileChannel fChan;
-        Long fSize;
-        ByteBuffer mBuf;
-        fChan = new FileInputStream(fileName).getChannel();
-        fSize = fChan.size();
-        mBuf = ByteBuffer.allocate(fSize.intValue());
-        fChan.read(mBuf);
-        fChan.close();
-        mBuf.rewind();
-        return mBuf;
-    }
 
     @BeforeAll
     public static void setUpClass() {
@@ -112,11 +93,7 @@ public class AsymFBCryptoECCTest {
             
             khA = new AsymKeysHolder(kpAlice.getPublic(), kpAlice.getPrivate(), kpBob.getPublic());
             khB = new AsymKeysHolder(kpBob.getPublic(), kpBob.getPrivate(), kpAlice.getPublic());
-            //write random file of plain text
-//            byte[] rt = new byte[RANDOM_BYTES_NUMBER];
-//            srand.nextBytes(rt);
-//
-//            writeToFile(ByteBuffer.wrap(rt), PLAIN_FILE);
+
         } catch (IOException | CertificateException | CryptoNotValidException ex) {
             fail("Can not read public or private key files");
         }

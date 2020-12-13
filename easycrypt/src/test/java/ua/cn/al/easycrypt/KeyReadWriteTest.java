@@ -38,7 +38,7 @@ import org.junit.jupiter.api.Test;
  *
  * @author Oleksiy Lukin alukin@gmail.com
  */
-public class KeyReadWriteTest {
+public class KeyReadWriteTest extends TestBase {
     private static KeyPair kp;
     private static final CryptoParams params = CryptoConfig.createDefaultParams();
     private static final String CERT_FILE = "testdata/cert-ecc/cacert.pem";
@@ -51,6 +51,7 @@ public class KeyReadWriteTest {
     
     @BeforeAll
     public static void setUpClass() {
+        mkdirs("testdata/out");
         Security.setProperty("crypto.policy", "unlimited");
         Security.addProvider(new BouncyCastleProvider());
 

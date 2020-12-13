@@ -17,7 +17,6 @@ import ua.cn.al.easycrypt.dataformat.AEADCiphered;
 import ua.cn.al.easycrypt.dataformat.AEADPlain;
 import ua.cn.al.easycrypt.impl.ecc.SymJCEImpl;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
@@ -33,7 +32,7 @@ import org.junit.jupiter.api.Test;
  *
  * @author Oleksiy Lukin alukin@gmail.com
  */
-public class SymFBCryptoTest {
+public class SymFBCryptoTest extends TestBase {
 
     private static final String PLAIN_FILE = "testdata/out/encrypt_sym_test_plain.bin";
     private static final String KEY_FILE = "testdata/out/encrypt_sym_test_key.bin";
@@ -45,28 +44,6 @@ public class SymFBCryptoTest {
 
     private static CryptoParams params = CryptoConfig.createDefaultParams();
         
-    public SymFBCryptoTest() {
-    }
-
-    private static void writeToFile(ByteBuffer data, String fileName) throws IOException {
-        FileChannel out = new FileOutputStream(fileName).getChannel();
-        data.rewind();
-        out.write(data);
-        out.close();
-    }
-
-    private static ByteBuffer readFromFile(String fileName) throws IOException {
-        FileChannel fChan;
-        Long fSize;
-        ByteBuffer mBuf;
-        fChan = new FileInputStream(fileName).getChannel();
-        fSize = fChan.size();
-        mBuf = ByteBuffer.allocate(fSize.intValue());
-        fChan.read(mBuf);
-        fChan.close();
-        mBuf.rewind();
-        return mBuf;
-    }
 
     @BeforeAll
     public static void setUpClass() {

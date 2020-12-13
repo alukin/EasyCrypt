@@ -39,7 +39,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Oleksiy Lukin alukin@gmail.com
  * @author Serhiy Lymar serhiy.lymar@gmail.com 
 */
-public class AsymFBCryptoRSATest {
+public class AsymFBCryptoRSATest extends TestBase {
 
     private static KeyPair kpAlice;
     private static KeyPair kpBob;
@@ -60,13 +60,6 @@ public class AsymFBCryptoRSATest {
     private static final CryptoParams params = CryptoConfig.createRSAn(RSA_KEY_LEN);
     
     public AsymFBCryptoRSATest() {
-    }
-
-    private static void writeToFile(ByteBuffer data, String fileName) throws IOException {
-        try (FileChannel out = new FileOutputStream(fileName).getChannel()) {
-            data.rewind();
-            out.write(data);
-        }
     }
 
     private static ByteBuffer readFromFile(String fileName, int size) throws IOException {

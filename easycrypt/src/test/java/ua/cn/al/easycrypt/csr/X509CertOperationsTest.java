@@ -25,20 +25,23 @@ import ua.cn.al.easycrypt.impl.csr.X509CertOperationsImpl;
 import ua.cn.al.easycrypt.impl.ecc.KeyGeneratorEC;
 import java.util.Map;
 import java.util.Properties;
+import org.junit.jupiter.api.BeforeAll;
+import ua.cn.al.easycrypt.TestBase;
 
 /**
  *
  * @author alukin@gmail.com
  */
-public class X509CertOperationsTest {
+public class X509CertOperationsTest extends TestBase {
  
     private static CryptoParams params = CryptoConfig.createDefaultParams();   
     
     private static final String CERT_FILE="testdata/out/certops_test_cert.pem";
     private static final String CSR_FILE="testdata/out/certops_test_csr.pem";
   
-    
-    public X509CertOperationsTest() {
+    @BeforeAll
+    private static void prepare(){
+        mkdirs("testdata/out");
     }
     
     private static Properties fillProperties() {
