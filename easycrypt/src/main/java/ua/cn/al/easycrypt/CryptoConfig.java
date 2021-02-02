@@ -105,7 +105,7 @@ public class CryptoConfig {
     }
 
     public static CryptoParams createRSAn(int keylen) {
-        if (keylen < 2048 || keylen > 16048) {
+        if (keylen < 2048 || keylen > 16384) {
             log.error("Unsupported key length: {}", keylen);
             return null;
         }
