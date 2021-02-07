@@ -5,12 +5,12 @@
     <parent>
         <groupId>ua.cn.al</groupId>
         <artifactId>easycrypt-top</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
     </parent>
 
     <artifactId>easycryptutil</artifactId>
     <name>easycrypt-util</name>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
 
     <dependencies>

@@ -116,44 +116,4 @@ public class KeyGeneratorRSA extends AbstractKeyGenerator {
         }
         return result;
     }
-
-    /**
-     * Simple deterministic key derivation function. It is one-way function. It
-     * calculates hash (defined in params) of secretPhrase.getBytes() and salt.
-     * If there is not enough bytes (keyLen) it uses hash result and the same
-     * salt again and puts additional bytes to output.
-     *
-     * @param secretPhrase UTF-8 encoded string
-     * @param salt random salt at least of 16 bytes
-     * @param keyLen desired output lenght
-     * @return array of bytes that is determined by secretPhrase ans salt. It is
-     * hard to calculate secretPhrase from it because it uses string
-     * cryptographic hashing function SHA-512
-     * @throws CryptoNotValidException
-     */
-    @Override
-    public byte[] deriveFromSecretPhrase(String secretPhrase, byte[] salt, int keyLen) throws CryptoNotValidException {
-        ByteBuffer bb = ByteBuffer.allocate(keyLen);
-        int haveBytes = 0;
-        byte[] input = secretPhrase.getBytes();
-        try {
-            MessageDigest hash = MessageDigest.getInstance("SHA-512");
-            while (haveBytes < keyLen) {
-                hash.update(input);
-                hash.update(salt);
-                byte[] digest = hash.digest();
-                haveBytes += digest.length;
-                try {
-                    bb.put(digest);
-                    input = digest;
-                } catch (BufferOverflowException e) {
-                    break;
-                }
-            }
-        } catch (NoSuchAlgorithmException ex) {
-            throw new CryptoNotValidException("Digest is not available", ex);
-        }
-        return bb.array();
-    }
-
 }

@@ -25,6 +25,7 @@ import java.nio.ByteBuffer;
 import java.security.*;
 import java.util.Arrays;
 import ua.cn.al.easycrypt.SymCryptor;
+import ua.cn.al.easycrypt.dataformat.Ciphered;
 
 /**
  * 
@@ -36,7 +37,7 @@ public class SymJCEImpl  implements SymCryptor {
     private static final Logger log = LoggerFactory.getLogger(SymJCEImpl.class);
 
     private static final SecureRandom random = new SecureRandom();
-
+    private boolean saltInMessage = false;
     private Cipher blockCipherSym;
     private SecretKeySpec symmetricKey;
 
@@ -109,7 +110,6 @@ public class SymJCEImpl  implements SymCryptor {
     public byte[] getNonce() {
         return Arrays.copyOfRange(gcmIV, params.getAesGcmSaltLen(), gcmIV.length);
     }
-
     @Override
     public byte[] encrypt(byte[] plain) throws CryptoNotValidException {
         //TODO: avoid data copy, use ByteBuffer somehow
@@ -119,9 +119,15 @@ public class SymJCEImpl  implements SymCryptor {
             byte[] encrypted = new byte[blockCipherSym.getOutputSize(plain.length)];
             int updateSize = blockCipherSym.update(plain, 0, plain.length, encrypted);
             blockCipherSym.doFinal(encrypted, updateSize);
-            ByteBuffer bb = ByteBuffer.allocate(encrypted.length + params.getAesGcmNonceLen());
-            bb.put(getNonce()).put(encrypted);
-            return bb.array();
+            Ciphered cmsg = new Ciphered();
+            cmsg.encrypted=encrypted;
+            if(saltInMessage){
+                cmsg.setIV(gcmIV);
+            }else{
+                cmsg.setExplicitNonce(getNonce());
+            }
+            cmsg.encrypted=encrypted;
+            return cmsg.toBytes();
         } catch (ShortBufferException | IllegalBlockSizeException | BadPaddingException
                 | InvalidKeyException | InvalidAlgorithmParameterException ex) {
             log.warn(ex.getMessage());
@@ -134,11 +140,18 @@ public class SymJCEImpl  implements SymCryptor {
     @Override
     public byte[] decrypt(byte[] ciphered) throws CryptoNotValidException {
         try {
-            setNonce(Arrays.copyOf(ciphered, params.getAesGcmNonceLen()));
+             Ciphered cmsg = Ciphered.fromBytes(ciphered);
+           
+             if(saltInMessage){
+                 setIV(cmsg.getIV());
+             }else{
+                 setNonce(cmsg.getExplicitNonce());
+             }
+            
             GCMParameterSpec gcmParameterSpecSym = new GCMParameterSpec(params.getGcmAuthTagLenBits(), gcmIV);            
             blockCipherSym.init(Cipher.DECRYPT_MODE, symmetricKey, gcmParameterSpecSym);
-            byte[] decrypted = new byte[blockCipherSym.getOutputSize(ciphered.length - params.getAesGcmNonceLen())];
-            int updateSize = blockCipherSym.update(ciphered, params.getAesGcmNonceLen(), ciphered.length - params.getAesGcmNonceLen(), decrypted);
+            byte[] decrypted = new byte[blockCipherSym.getOutputSize(cmsg.encrypted.length)];
+            int updateSize = blockCipherSym.update(cmsg.encrypted, 0, cmsg.encrypted.length, decrypted);
             blockCipherSym.doFinal(decrypted, updateSize);
             return decrypted;
         } catch (ShortBufferException | IllegalBlockSizeException | BadPaddingException
@@ -161,7 +174,12 @@ public class SymJCEImpl  implements SymCryptor {
             msg.encrypted = new byte[blockCipherSym.getOutputSize(plain.length)];
             int updateSize = blockCipherSym.update(plain, 0, plain.length, msg.encrypted);
             blockCipherSym.doFinal(msg.encrypted, updateSize);
-            msg.setExplicitNonce(getNonce());
+            
+            if(saltInMessage){
+                msg.setIV(gcmIV);
+            }else{
+                msg.setExplicitNonce(getNonce());
+            }
             return msg;
         } catch (ShortBufferException | IllegalBlockSizeException | BadPaddingException
                 | InvalidKeyException | InvalidAlgorithmParameterException ex) {
@@ -174,7 +192,11 @@ public class SymJCEImpl  implements SymCryptor {
     public AEADPlain decryptWithAEAData(byte[] message) throws CryptoNotValidException {
         AEADPlain res = new AEADPlain();
         AEADCiphered msg = AEADCiphered.fromBytes(message, params);
-        setNonce(msg.getExplicitNonce());
+        if (saltInMessage) {
+            setIV(msg.getIV());
+        } else {
+            setNonce(msg.getExplicitNonce());
+        }
         try {
             GCMParameterSpec gcmParameterSpecSym = new GCMParameterSpec(params.getGcmAuthTagLenBits(), gcmIV);
             blockCipherSym.init(Cipher.DECRYPT_MODE, symmetricKey, gcmParameterSpecSym);
@@ -191,5 +213,11 @@ public class SymJCEImpl  implements SymCryptor {
             throw new CryptoNotValidException("Invalid symmetric key", ex);
         }
     }
+
+    @Override
+    public void saltInMessage(boolean b) {
+        saltInMessage = b;
+    }
+
 
 }

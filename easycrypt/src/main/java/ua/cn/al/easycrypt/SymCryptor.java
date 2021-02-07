@@ -79,10 +79,19 @@ public interface SymCryptor extends Cryptor {
     /**
      * get 8 bytes of variable part of GCM IV
      *
-     * @return b bytes array
+     * @return b 8 bytes array
      */
     byte[] getNonce();
-
+    /**
+     * get 4 bytes of salt (part of IV)
+     * @return 4 bytes of salt
+     */
     public byte[] getSalt();
-
+    
+    /**
+     * Do we save salt in the encrypted message along with explicit nounce (entire IV)
+     * of keep salt separatelly. Default is to put zero bytes instead of real salt.,
+     * @param b saves salt in message prefix along with explicit nounce 
+     */
+    public void saltInMessage(boolean b);
 }
