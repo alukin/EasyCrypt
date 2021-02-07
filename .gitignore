@@ -27,3 +27,4 @@ hs_err_pid*
 # test output files
 /easycrypt/testdata/out
 
+/graalvm-example/target/
