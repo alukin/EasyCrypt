@@ -3,7 +3,8 @@
 Cryptograhy should be easy to use and hard to misude. Crpypography should be boring. 
 
 EasyCrypto is Java library and utilites in Java that implements  military grade
-Elliptic Curvers Cryptography (ECC) and related algorytms with extremelly simple interace. Programmer can just initialize library with appropriate preset and then use simpe operations to generate keys, encrypt and decrypt data.
+Elliptic Curvers Cryptography (ECC) and related algorytms with extremelly simple interace. 
+Programmer can just initialize library with appropriate preset and then use simpe operations to generate keys, encrypt and decrypt data.
 
 Support of RSA based cryptography also is present for compatibility reasons.
 
