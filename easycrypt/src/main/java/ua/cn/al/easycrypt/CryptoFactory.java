@@ -27,9 +27,9 @@ import ua.cn.al.easycrypt.impl.ecc.SymJCEImpl;
 import ua.cn.al.easycrypt.impl.rsa.AsymCryptorRSAImpl;
 
 /**
- * Factory that creates configured implementations of FBCrypto interfaces. These
+ * Factory that creates configured implementations of Crypto interfaces. These
  * all crypto routines that could be used with any supported encryption system
- * defined in FbCryptoParams,
+ * defined in CryptoParams,
  *
  * @author alukin@gmail.com
  */
@@ -123,7 +123,7 @@ public class CryptoFactory {
 
     /**
      * Creates instance of various digesters. Default digester could be
-     * different for different values of FBCryptoParans. It is optimized by
+     * different for different values of CryptoParans. It is optimized by
      * security and performance. But anyway any implemented digester is
      * available.
      *

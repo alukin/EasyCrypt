@@ -12,7 +12,7 @@
 package ua.cn.al.easycrypt;
 
 /**
- * Configuration parameters for all FBCrypto library
+ * Configuration parameters for all EasyCrypt library
  *
  * @author Oleksiy Lukin alukin@gmail.com
  */

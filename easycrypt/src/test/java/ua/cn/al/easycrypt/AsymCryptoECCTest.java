@@ -45,7 +45,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author Oleksiy Lukin alukin@gmail.com
  */
-public class AsymFBCryptoECCTest extends TestBase{
+public class AsymCryptoECCTest extends TestBase{
 
     private static KeyPair kpAlice;
     private static KeyPair kpBob;
@@ -71,7 +71,7 @@ public class AsymFBCryptoECCTest extends TestBase{
     private static final CryptoParams params = CryptoConfig.createDefaultParams();
     
     
-    public AsymFBCryptoECCTest() {
+    public AsymCryptoECCTest() {
     }
     
 
@@ -205,7 +205,7 @@ public class AsymFBCryptoECCTest extends TestBase{
     
     
     /**
-     * Test of encryptAsymmetricWithAEAData method, of class FBCrypto.
+     * Test of encryptAsymmetricWithAEAData method, of class EasyCrypt.
      */
     @Test
     public void testEncryptAsymmetricWithAEAData() throws Exception {

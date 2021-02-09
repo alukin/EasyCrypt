@@ -42,7 +42,7 @@ public class CryptoFactoryHelper {
             int bitLength = rpk.getModulus().bitLength();
             params = CryptoConfig.createRSAn(bitLength);
         } else if ("EC".equalsIgnoreCase(algo)) {
-            //TODO: implement different FB
+            //TODO: implement different params
             params = CryptoConfig.createDefaultParams();
         } else {
             params = CryptoConfig.createDefaultParams();
