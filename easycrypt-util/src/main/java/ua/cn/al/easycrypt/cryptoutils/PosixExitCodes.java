@@ -10,7 +10,7 @@
  * GNU General Public License for more details.
  */
 
-package io.firstbridge.cryptoutils;
+package ua.cn.al.easycrypt.cryptoutils;
 
 /**
  *

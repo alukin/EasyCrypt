@@ -9,7 +9,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  */
-package io.firstbridge.cryptoutils;
+package ua.cn.al.easycrypt.cryptoutils;
 
 import com.beust.jcommander.JCommander;
 import ua.cn.al.easycrypt.csr.CertificateRequestData;
