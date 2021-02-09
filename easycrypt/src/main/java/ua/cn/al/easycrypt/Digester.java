@@ -22,7 +22,7 @@ import java.security.MessageDigest;
 public interface Digester {
     
    /**
-    * Default digest algorithm defined by FBCryptoParams 
+    * Default digest algorithm defined by CryptoParams 
     * @param message
     * @return
      * @throws ua.cn.al.easycrypt.CryptoNotValidException
@@ -31,7 +31,7 @@ public interface Digester {
 
    /**
     * Create and return MessageDigest for specified digester parameter
-    * @return MessageDigest object for algorithm specified by FBCryptoParams
+    * @return MessageDigest object for algorithm specified by CryptoParams
     * @throws CryptoNotValidException when implementation for algorithm does not exist
     */
    MessageDigest digest() throws CryptoNotValidException;

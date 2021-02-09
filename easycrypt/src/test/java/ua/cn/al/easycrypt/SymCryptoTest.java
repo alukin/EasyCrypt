@@ -16,10 +16,8 @@ package ua.cn.al.easycrypt;
 import ua.cn.al.easycrypt.dataformat.AEADCiphered;
 import ua.cn.al.easycrypt.dataformat.AEADPlain;
 import ua.cn.al.easycrypt.impl.ecc.SymJCEImpl;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
 import java.security.SecureRandom;
 import org.junit.jupiter.api.AfterAll;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -32,7 +30,7 @@ import org.junit.jupiter.api.Test;
  *
  * @author Oleksiy Lukin alukin@gmail.com
  */
-public class SymFBCryptoTest extends TestBase {
+public class SymCryptoTest extends TestBase {
 
     private static final String PLAIN_FILE = "testdata/out/encrypt_sym_test_plain.bin";
     private static final String KEY_FILE = "testdata/out/encrypt_sym_test_key.bin";

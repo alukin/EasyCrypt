@@ -19,7 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Introduction to FBCrypto: Simple symmetric encryption with default crypto
+ * Introduction to EasyCrypt: Simple symmetric encryption with default crypto
  * parameters It should work for all supported cypto systems
  *
  * @author Oleksiy Lukin alukin@gmail.com

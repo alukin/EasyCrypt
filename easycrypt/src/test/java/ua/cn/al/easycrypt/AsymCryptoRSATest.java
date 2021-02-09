@@ -23,7 +23,6 @@ import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.io.FileOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
@@ -39,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Oleksiy Lukin alukin@gmail.com
  * @author Serhiy Lymar serhiy.lymar@gmail.com 
 */
-public class AsymFBCryptoRSATest extends TestBase {
+public class AsymCryptoRSATest extends TestBase {
 
     private static KeyPair kpAlice;
     private static KeyPair kpBob;
@@ -59,7 +58,7 @@ public class AsymFBCryptoRSATest extends TestBase {
     
     private static final CryptoParams params = CryptoConfig.createRSAn(RSA_KEY_LEN);
     
-    public AsymFBCryptoRSATest() {
+    public AsymCryptoRSATest() {
     }
 
     private static ByteBuffer readFromFile(String fileName, int size) throws IOException {

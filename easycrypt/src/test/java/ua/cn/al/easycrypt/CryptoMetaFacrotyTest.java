@@ -40,7 +40,7 @@ public class CryptoMetaFacrotyTest {
     public static void setUpClass() {
         // we have to test crypto providers
         Provider p = CryptoConfig.getProvider();
-        System.out.println("FB-crypto security provider: " + p.getName() + " version: " + p.getVersionStr());
+        System.out.println("EasyCrypt security provider: " + p.getName() + " version: " + p.getVersionStr());
         // Bouncy castle provider must be here
         Assertions.assertEquals("BC", p.getName());
         boolean bcFound = false;

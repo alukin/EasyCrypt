@@ -23,7 +23,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
 /**
- * Reads keys in various formats and returns in the form acceptable by FBCrypto
+ * Reads keys in various formats and returns in the form acceptable by EasyCrypt
  *
  * @author Oleksiy Lukin alukin@gmail.com
  */

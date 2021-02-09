@@ -54,7 +54,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Reads keys in various formats and returns in the form acceptable by FBCrypto
+ * Reads keys in various formats and returns in the form acceptable by EasyCrypt
  *
  * @author Oleksiy Lukin alukin@gmail.com
  */
