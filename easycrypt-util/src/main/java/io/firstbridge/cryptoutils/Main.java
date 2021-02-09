@@ -45,7 +45,7 @@ public class Main {
                 .addCommand("x509", x509)
                 .addCommand("certreq", certreq)
                 .build();
-        jc.setProgramName("fbcryptoutils");
+        jc.setProgramName("cryptoutils");
         try {
             jc.parse(argv);
         } catch (RuntimeException ex) {
@@ -55,7 +55,7 @@ public class Main {
             System.exit(PosixExitCodes.EX_USAGE.exitCode());
         }
         if(args.show_version){
-            System.out.println("FB-crypto utils version: "+version);
+            System.out.println("cryptoutils version: "+version);
             System.exit(PosixExitCodes.OK.exitCode());          
         }
         if (args.help) {
@@ -72,10 +72,10 @@ public class Main {
         }
         
         if (args.debug) {
-            LogManager.getLogger("io.firstbridge").setLevel(org.apache.log4j.Level.DEBUG);
+            LogManager.getLogger("ua.cn.al").setLevel(org.apache.log4j.Level.DEBUG);
             log.debug("Current disrectory: " + System.getProperty("user.dir"));
         } else {
-            LogManager.getLogger("io.firstbridge").setLevel(org.apache.log4j.Level.ERROR);
+            LogManager.getLogger("ua.cn.al").setLevel(org.apache.log4j.Level.ERROR);
         }
         
         cp = new CommandProcessor(args.storefile, args.storealias, args.storepass, args.keypass);

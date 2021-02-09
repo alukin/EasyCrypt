@@ -24,7 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * RSA based implementation of FBCrypto interface
+ * RSA based implementation of EasyCrypt interface
  *
  * @author Oleksiy Lukin alukin@gmail.com
  */

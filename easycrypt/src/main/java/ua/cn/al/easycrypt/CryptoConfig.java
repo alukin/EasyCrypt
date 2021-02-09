@@ -19,7 +19,7 @@ import java.security.Security;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 /**
- * Configuration parameters for all FBCrypto library
+ * Configuration parameters for all EasyCrypt library
  *
  * @author Oleksiy Lukin alukin@gmail.com
  */

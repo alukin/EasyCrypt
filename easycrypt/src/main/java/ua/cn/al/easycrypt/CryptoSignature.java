@@ -50,7 +50,7 @@ public interface CryptoSignature {
 
     /**
      * Verifies signature using theirPublicKey
-     * Signature algorithm depends on FBCryptoParams settings. 
+     * Signature algorithm depends on CryptoParams settings. 
      * Please construct crypto routines
      * using CryptoMetaFactory from appropriate signature method ID string
      * @param message message bytes
@@ -71,7 +71,7 @@ public interface CryptoSignature {
 
     /**
      * Verifies signature using theirPublicKey
-     * Signature algorithm depends on FBCryptoParams settings. 
+     * Signature algorithm depends on CryptoParams settings. 
      * Please construct cryptographic routines
      * using CryptoMetaFactory from appropriate signature method ID string
      * @param message message bytes

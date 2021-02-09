@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * JSON FbWallet model
+ * JSON Wallet model
  * @author Oleksiy Lukin alukin@gmail.com
  */
 @JsonIgnoreProperties(ignoreUnknown = true)

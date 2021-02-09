@@ -48,7 +48,7 @@ import org.junit.jupiter.api.Test;
  *
  * @author Oleksiy Lukin alukin@gmail.com
  */
-public class NoFilesFBCryptoTest {
+public class NoFilesCryptoTest {
     
     private static KeyPair kpAlice;
     private static KeyPair kpBob;
@@ -58,7 +58,7 @@ public class NoFilesFBCryptoTest {
     private static AsymKeysHolder khA;
     private static AsymKeysHolder khB;
     
-    public NoFilesFBCryptoTest() {
+    public NoFilesCryptoTest() {
     }
     
     @BeforeAll
@@ -93,7 +93,7 @@ public class NoFilesFBCryptoTest {
     }
 
     /**
-     * Test of setSymmetricKey method, of class FBCrypto.
+     * Test of setSymmetricKey method, of class EasyCrypt.
      */
     @Test
     public void testSetSymmetricKey() throws Exception {
@@ -109,7 +109,7 @@ public class NoFilesFBCryptoTest {
     }
 
     /**
-     * Test of setSymmetricIV method, of class FBCrypto.
+     * Test of setSymmetricIV method, of class EasyCrypt.
      */
     @Test
     public void testSetSymmetricIV() {
@@ -127,7 +127,7 @@ public class NoFilesFBCryptoTest {
     }
 
     /**
-     * Test of setSymmetricSalt method, of class FBCrypto.
+     * Test of setSymmetricSalt method, of class EasyCrypt.
      */
     @Test
     public void testSetSymmetricSaltAndNounce() {
@@ -156,7 +156,7 @@ public class NoFilesFBCryptoTest {
 
 
     /**
-     * Test of encryptSymmetric method, of class FBCrypto.
+     * Test of encryptSymmetric method, of class EasyCrypt.
      */
     @Test
     public void testEncryptSymmetric() throws Exception {
@@ -185,7 +185,7 @@ public class NoFilesFBCryptoTest {
     }
 
     /**
-     * Test of encryptSymmetricWithAEAData method, of class FBCrypto.
+     * Test of encryptSymmetricWithAEAData method, of class EasyCrypt.
      */
     @Test
     public void testEncryptSymmetricWithAEAData() throws Exception {
@@ -219,7 +219,7 @@ public class NoFilesFBCryptoTest {
     }
 
     /**
-     * Test of encryptAsymmetric method, of class FBCrypto.
+     * Test of encryptAsymmetric method, of class EasyCrypt.
      */
     @Test
     public void testEncryptAsymmetricIES() throws Exception  {
@@ -259,7 +259,7 @@ public class NoFilesFBCryptoTest {
         assertArrayEquals(sharedKey1, sharedKey2);
     }
     /**
-     * Test of encryptAsymmetric method, of class FBCrypto.
+     * Test of encryptAsymmetric method, of class EasyCrypt.
      */
     @Test
     public void testEncryptAsymmetric() throws Exception  {
@@ -279,7 +279,7 @@ public class NoFilesFBCryptoTest {
     }
     
     /**
-     * Test of encryptAsymmetricWithAEAData method, of class FBCrypto.
+     * Test of encryptAsymmetricWithAEAData method, of class EasyCrypt.
      */
     @Test
     public void testEncryptAsymmetricWithAEAData() throws Exception {
@@ -306,7 +306,7 @@ public class NoFilesFBCryptoTest {
 
 
     /**
-     * Test of digest method, of class FBCrypto.
+     * Test of digest method, of class EasyCrypt.
      * @throws java.lang.Exception
      */
     @Test
@@ -321,7 +321,7 @@ public class NoFilesFBCryptoTest {
     }
 
     /**
-     * Test of sign method, of class FBCrypto.
+     * Test of sign method, of class EasyCrypt.
      */
     @Test
     public void testSign() throws Exception {
