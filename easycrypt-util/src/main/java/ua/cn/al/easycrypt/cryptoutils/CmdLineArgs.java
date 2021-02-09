@@ -11,7 +11,7 @@
  *
  */
 
-package io.firstbridge.cryptoutils;
+package ua.cn.al.easycrypt.cryptoutils;
 
 import com.beust.jcommander.Parameter;
 

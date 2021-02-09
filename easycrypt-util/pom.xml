@@ -41,7 +41,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>io.firstbridge.cryptoutils.Main</mainClass>
+                            <mainClass>.ua.cn.al.easycrypt.cryptoutils.Main</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
