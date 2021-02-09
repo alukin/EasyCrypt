@@ -22,7 +22,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Introduction to FBCrypto: Simple asymmetric encryption
+ * Introduction to EasyCrypt: Simple asymmetric encryption
  * with default crypto parameters and integrated encryption schema.
  * It should work for all supported cypto systems
  *

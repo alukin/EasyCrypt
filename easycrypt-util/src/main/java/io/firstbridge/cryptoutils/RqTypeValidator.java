@@ -18,7 +18,7 @@ import java.util.Arrays;
 
 /**
  *
- * @author al
+ * @author Oleksiy Lukin alukin@gmail.com
  */
 public class RqTypeValidator implements IParameterValidator {
     

@@ -58,7 +58,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <configuration>
-                    <destDir>docs/api/fbcrypto</destDir>
+                    <destDir>docs/api/easycrypt</destDir>
                     <doclint>none</doclint>
                 </configuration>
             </plugin>
