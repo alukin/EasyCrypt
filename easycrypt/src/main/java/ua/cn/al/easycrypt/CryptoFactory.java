@@ -12,6 +12,14 @@
 
 package ua.cn.al.easycrypt;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.security.DigestOutputStream;
+import java.security.MessageDigest;
+import javax.crypto.Cipher;
+import javax.crypto.CipherInputStream;
+import javax.crypto.CipherOutputStream;
 import ua.cn.al.easycrypt.csr.X509CertOperations;
 import ua.cn.al.easycrypt.impl.ecc.KeyGeneratorEC;
 import ua.cn.al.easycrypt.impl.rsa.KeyGeneratorRSA;
@@ -177,5 +185,20 @@ public class CryptoFactory {
      */
     public CryptoParams getCryptoParams() {
         return params;
+    }
+
+    public DigestOutputStream getDigestOutputStream(OutputStream sink) {
+        MessageDigest digest = null;
+        return new DigestOutputStream(sink, digest);
+    }
+
+    public CipherOutputStream getCipherOutputStream(OutputStream sink) {
+        Cipher c = null;
+        return new CipherOutputStream(sink, c);
+    }
+
+    public CipherInputStream getCipherInputStream(InputStream source) {
+        Cipher c = null;
+        return new CipherInputStream(source,c);
     }
 }

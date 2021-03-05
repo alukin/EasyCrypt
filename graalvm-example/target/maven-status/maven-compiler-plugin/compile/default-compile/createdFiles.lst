@@ -1,0 +1,5 @@
+ua/cn/al/graalvm/example/Main.class
+META-INF/native-image/picocli-generated/resource-config.json
+META-INF/native-image/picocli-generated/proxy-config.json
+ua/cn/al/graalvm/example/CmdLineArgs.class
+META-INF/native-image/picocli-generated/reflect-config.json

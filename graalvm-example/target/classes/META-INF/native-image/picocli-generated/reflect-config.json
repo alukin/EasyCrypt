@@ -1,0 +1,13 @@
+[
+  {
+    "name" : "ua.cn.al.graalvm.example.CmdLineArgs",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "fields" : [
+      { "name" : "help" },
+      { "name" : "name" }
+    ]
+  }
+]
