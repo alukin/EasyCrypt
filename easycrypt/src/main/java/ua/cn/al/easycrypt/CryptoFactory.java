@@ -12,14 +12,18 @@
 
 package ua.cn.al.easycrypt;
 
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.DigestOutputStream;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
+import javax.crypto.NoSuchPaddingException;
+import lombok.extern.slf4j.Slf4j;
 import ua.cn.al.easycrypt.csr.X509CertOperations;
 import ua.cn.al.easycrypt.impl.ecc.KeyGeneratorEC;
 import ua.cn.al.easycrypt.impl.rsa.KeyGeneratorRSA;
@@ -41,6 +45,7 @@ import ua.cn.al.easycrypt.impl.rsa.AsymCryptorRSAImpl;
  *
  * @author alukin@gmail.com
  */
+@Slf4j
 public class CryptoFactory {
 
     private final CryptoParams params;
@@ -188,17 +193,42 @@ public class CryptoFactory {
     }
 
     public DigestOutputStream getDigestOutputStream(OutputStream sink) {
-        MessageDigest digest = null;
+        MessageDigest digest=null;
+        try {
+            digest = MessageDigest.getInstance(params.digester);
+        } catch (NoSuchAlgorithmException ex) {
+            log.error("Can not create digester for {}",params.digester, ex);
+        }
         return new DigestOutputStream(sink, digest);
     }
 
-    public CipherOutputStream getCipherOutputStream(OutputStream sink) {
-        Cipher c = null;
+    public CipherOutputStream getCipherOutputStream(OutputStream sink, byte[] IV, byte[] key) throws CryptoNotValidException {
+        SymCryptor sc = getSymCryptor();
+        sc.setIV(IV);
+        sc.setKey(key);
+        Cipher c=null;
+        try {
+            c = sc.getCipher(Cipher.ENCRYPT_MODE);
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(CryptoFactory.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchPaddingException ex) {
+            Logger.getLogger(CryptoFactory.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return new CipherOutputStream(sink, c);
     }
 
-    public CipherInputStream getCipherInputStream(InputStream source) {
-        Cipher c = null;
+    public CipherInputStream getCipherInputStream(InputStream source ,byte[] IV, byte[] key ) throws CryptoNotValidException {
+        SymCryptor sc = getSymCryptor();
+        sc.setIV(IV);
+        sc.setKey(key);
+        Cipher c=null;
+        try {
+            c = sc.getCipher(Cipher.DECRYPT_MODE);
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(CryptoFactory.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchPaddingException ex) {
+            Logger.getLogger(CryptoFactory.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return new CipherInputStream(source,c);
     }
 }

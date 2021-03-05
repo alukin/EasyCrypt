@@ -13,21 +13,19 @@ package ua.cn.al.easycrypt.examples;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.security.DigestOutputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
 import org.bouncycastle.util.encoders.Hex;
 import ua.cn.al.easycrypt.CryptoFactory;
+import ua.cn.al.easycrypt.CryptoNotValidException;
+import ua.cn.al.easycrypt.KeyGenerator;
 
 
 /**
- *
+ * Example of streaming interface
  * @author  Oleksiy Lukin alukin@gmail.com
  */
 public class StreamingExample {
@@ -57,21 +55,28 @@ public class StreamingExample {
         }
         
         System.out.println("Ecryption plain sting: "+plain);
+        KeyGenerator kg = factory.getKeyGenerator();
+        byte[] iv = kg.generateIV();
+        byte[] key =  kg.generateSymKey();
         
         ByteArrayOutputStream sink = new ByteArrayOutputStream(200);
         
-        try(CipherOutputStream es = factory.getCipherOutputStream(sink)){
+        try(CipherOutputStream es = factory.getCipherOutputStream(sink,iv,key)){
             es.write(plain.getBytes());
         } catch (IOException ex) {
+            System.out.println("Something is wrong: "+ex.getMessage());
+        } catch (CryptoNotValidException ex) {
             System.out.println("Something is wrong: "+ex.getMessage());
         }
         
         ByteArrayInputStream source = new ByteArrayInputStream(sink.toByteArray());
-        try(CipherInputStream ds = factory.getCipherInputStream(source)){
+        try(CipherInputStream ds = factory.getCipherInputStream(source,iv,key)){
             byte[] b = ds.readAllBytes();
             System.out.println("Text after encryption/decryption round");
             System.out.println(new String(b));
         } catch (IOException ex) {
+            System.out.println("Something is wrong: "+ex.getMessage());
+        } catch (CryptoNotValidException ex) {
             System.out.println("Something is wrong: "+ex.getMessage());
         }
     }

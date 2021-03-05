@@ -13,6 +13,10 @@
 
 package ua.cn.al.easycrypt;
 
+import java.security.NoSuchAlgorithmException;
+import javax.crypto.Cipher;
+import javax.crypto.NoSuchPaddingException;
+
 /**
  * Interface to symmetric crypto routines
  *
@@ -94,4 +98,13 @@ public interface SymCryptor extends Cryptor {
      * @param b saves salt in message prefix along with explicit nounce 
      */
     public void saltInMessage(boolean b);
+
+    /**
+     * Get cipher in encrypt or decrypt mode. Keys should be already set.
+     * It is not intended to external use, but may be used if programmers know how 
+     * to work with ciphers
+     * @param mode is Chipher.ENCRIPT_MODE or Chipher.DECRYPT_MODE
+     * @return ready to use cipher
+     */
+    public Cipher getCipher(int mode)throws NoSuchAlgorithmException, NoSuchPaddingException;
 }
