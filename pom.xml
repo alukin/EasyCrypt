@@ -8,6 +8,7 @@
     <version>1.1.0</version>
     <packaging>pom</packaging>
     <name>EasyCrypt top</name>
+    
     <organization>
         <name>Oleksy Lukin</name>
         <url>http://al.cn.ua/</url>
