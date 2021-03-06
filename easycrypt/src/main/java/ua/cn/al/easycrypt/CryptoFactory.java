@@ -17,8 +17,6 @@ import java.io.OutputStream;
 import java.security.DigestOutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
@@ -209,10 +207,8 @@ public class CryptoFactory {
         Cipher c=null;
         try {
             c = sc.getCipher(Cipher.ENCRYPT_MODE);
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(CryptoFactory.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchPaddingException ex) {
-            Logger.getLogger(CryptoFactory.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException ex) {
+           log.error("Can not create cipher", ex);
         }
         return new CipherOutputStream(sink, c);
     }
@@ -224,10 +220,8 @@ public class CryptoFactory {
         Cipher c=null;
         try {
             c = sc.getCipher(Cipher.DECRYPT_MODE);
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(CryptoFactory.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchPaddingException ex) {
-            Logger.getLogger(CryptoFactory.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException ex) {
+           log.error("Can not create cipher", ex);
         }
         return new CipherInputStream(source,c);
     }

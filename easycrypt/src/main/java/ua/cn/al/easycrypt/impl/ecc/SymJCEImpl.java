@@ -15,8 +15,6 @@ import ua.cn.al.easycrypt.CryptoParams;
 import ua.cn.al.easycrypt.dataformat.AEADPlain;
 import ua.cn.al.easycrypt.dataformat.AEADCiphered;
 import ua.cn.al.easycrypt.CryptoNotValidException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.crypto.*;
 import javax.crypto.spec.GCMParameterSpec;
@@ -24,7 +22,6 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.ByteBuffer;
 import java.security.*;
 import java.util.Arrays;
-import java.util.logging.Level;
 import lombok.extern.slf4j.Slf4j;
 import ua.cn.al.easycrypt.SymCryptor;
 import ua.cn.al.easycrypt.dataformat.Ciphered;
@@ -122,8 +119,8 @@ public class SymJCEImpl implements SymCryptor {
             return cmsg.toBytes();
         } catch (ShortBufferException | IllegalBlockSizeException | BadPaddingException
                 | NoSuchAlgorithmException| NoSuchPaddingException  ex) {
-            log.warn(ex.getMessage());
-            throw new CryptoNotValidException("Invalid symmetric key", ex);
+            log.warn("Symmatric encryption error", ex);
+            throw new CryptoNotValidException(ex.getMessage(), ex);
         }
     }
 
@@ -145,8 +142,8 @@ public class SymJCEImpl implements SymCryptor {
             return decrypted;
         } catch (ShortBufferException | IllegalBlockSizeException | BadPaddingException
               |NoSuchPaddingException | NoSuchAlgorithmException ex) {
-            log.warn(ex.getMessage());
-            throw new CryptoNotValidException("Invalid symmetric key", ex);
+            log.warn("Symmetric decryption error",ex);
+            throw new CryptoNotValidException(ex.getMessage(), ex);
         }
     }
 
@@ -170,8 +167,8 @@ public class SymJCEImpl implements SymCryptor {
             }
             return msg;
         } catch (ShortBufferException | IllegalBlockSizeException | NoSuchPaddingException | BadPaddingException | NoSuchAlgorithmException ex) {
-            log.warn(ex.getMessage());
-            throw new CryptoNotValidException("Invalid symmetric key", ex);
+            log.warn("AEAD Encryption error", ex);
+            throw new CryptoNotValidException(ex.getMessage(), ex);
         }
     }
 
@@ -193,8 +190,8 @@ public class SymJCEImpl implements SymCryptor {
             res.hmacOk = true;
             return res;
         } catch (ShortBufferException | IllegalBlockSizeException | BadPaddingException | NoSuchAlgorithmException | NoSuchPaddingException ex) {
-            log.warn(ex.getMessage());
-            throw new CryptoNotValidException("Invalid symmetric key", ex);
+            log.warn("AEAD Decryption error", ex);
+            throw new CryptoNotValidException(ex.getMessage(), ex);
         }
     }
 
