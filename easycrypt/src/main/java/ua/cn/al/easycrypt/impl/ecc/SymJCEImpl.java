@@ -104,7 +104,7 @@ public class SymJCEImpl implements SymCryptor {
     public byte[] encrypt(byte[] plain) throws CryptoNotValidException {
         //TODO: avoid data copy, use ByteBuffer somehow
         try {
-            Cipher blockCipherSym = getCipher(Cipher.DECRYPT_MODE);
+            Cipher blockCipherSym = getCipher(Cipher.ENCRYPT_MODE);
             byte[] encrypted = new byte[blockCipherSym.getOutputSize(plain.length)];
             int updateSize = blockCipherSym.update(plain, 0, plain.length, encrypted);
             blockCipherSym.doFinal(encrypted, updateSize);
@@ -183,6 +183,7 @@ public class SymJCEImpl implements SymCryptor {
         }
         try {
             Cipher blockCipherSym = getCipher(Cipher.DECRYPT_MODE);
+            blockCipherSym.updateAAD(msg.aatext);
             res.decrypted = new byte[blockCipherSym.getOutputSize(msg.encrypted.length)];
             int updateSize = blockCipherSym.update(msg.encrypted, 0, msg.encrypted.length, res.decrypted);
             blockCipherSym.doFinal(res.decrypted, updateSize);
