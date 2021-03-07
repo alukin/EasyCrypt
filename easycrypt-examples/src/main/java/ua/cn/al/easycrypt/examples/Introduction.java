@@ -1,4 +1,6 @@
 /*
+ * Copyright (C) 2018-2021 Oleksiy Lukin alukin@gmail.com
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation, version 2
@@ -22,9 +24,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Introduction to EasyCrypt: Simple asymmetric encryption
- * with default crypto parameters and integrated encryption schema.
- * It should work for all supported cypto systems
+ * Introduction to FBCrypto: Simple asymmetric encryption with default crypto
+ * parameters and integrated encryption schema. It should work for all supported
+ * cypto systems
  *
  * @author Oleksiy Lukin alukin@gmail.com
  */
@@ -54,7 +56,7 @@ public class Introduction {
 
         String plainA = "Hello, Bob! Howdy?";
         try {
-            
+
 //Prepare Alice's side
             AsymCryptor cryptorA = factory.getAsymCryptor();
             cryptorA.setKeys(keysAlice);
@@ -66,7 +68,7 @@ public class Introduction {
             cryptorB.setKeys(keysBob);
             CryptoSignature signerB = factory.getCryptoSiganture();
             signerB.setKeys(keysBob);
-            
+
 // Encrypt for Bob and sign Alice's message
             byte[] msgA = cryptorA.encrypt(plainA.getBytes());
             byte[] sinatureA = signerA.sign(msgA);
@@ -75,16 +77,16 @@ public class Introduction {
             boolean sigOK = signerB.verify(msgA, sinatureA);
 // Is everything OK?
             String planAdecrypted = new String(pa);
-            if(sigOK){
+            if (sigOK) {
                 System.out.println("Bob verified Alice's signature sucessfuly.");
-            }else{
+            } else {
                 System.out.println("ERROR in signature check!");
             }
-            if(plainA.equals(planAdecrypted)){
+            if (plainA.equals(planAdecrypted)) {
                 System.out.println("Bob decryped Alices message and she says:");
-                System.out.println(planAdecrypted);        
-            }else{
-                System.out.println("ERROR in message decyprion!");                
+                System.out.println(planAdecrypted);
+            } else {
+                System.out.println("ERROR in message decyprion!");
             }
 
         } catch (CryptoNotValidException ex) {
