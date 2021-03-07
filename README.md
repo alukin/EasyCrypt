@@ -19,9 +19,9 @@ ___Goals of EasyCrypt design are:___
 
 ## Components 
 
-* [EasyCrypt libray](cryptolib) Java library, builds to JAR file
-* [EasyCrypt util](cryptoutils) OpenSSL-like utility
-* [EasyCrypt examples](clyptolib-examples) Examples of code
+* [EasyCrypt libray](easycrypt) Java library, builds to JAR file
+* [EasyCrypt util](easycrypt-util) OpenSSL-like utility
+* [EasyCrypt examples](easycrypt-examples) Examples of code
 
 ## History
 Previous "incarnation" of this library, called fb-crypto has antother 2 compatible libraries with very similar interface written in C++ and JavaScript/TypeSesript.
