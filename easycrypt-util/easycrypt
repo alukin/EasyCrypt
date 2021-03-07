@@ -1,4 +1,3 @@
 #!/bin/bash
-VERSION=1.0.1
-JAR_PATH=./target/easycryptutil-${VERSION}-jar-with-dependencies.jar
+JAR_PATH=./target/easycrypt.jar
 java -jar ${JAR_PATH} $@
