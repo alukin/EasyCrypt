@@ -15,7 +15,6 @@ import ua.cn.al.easycrypt.csr.CertificateRequestData;
 import java.io.File;
 import java.util.Properties;
 import java.util.Map;
-import org.apache.log4j.LogManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import picocli.CommandLine;
@@ -72,13 +71,13 @@ public class Main {
             });
             System.exit(PosixExitCodes.OK.exitCode());
         }
-        
-        if (args.debug) {
-            LogManager.getLogger("ua.cn.al").setLevel(org.apache.log4j.Level.DEBUG);
-            log.debug("Current disrectory: " + System.getProperty("user.dir"));
-        } else {
-            LogManager.getLogger("ua.cn.al").setLevel(org.apache.log4j.Level.ERROR);
-        }
+//TODO: log level setting        
+//        if (args.debug) {
+//            LogManager.getLogger("ua.cn.al").setLevel(org.apache.log4j.Level.DEBUG);
+//            log.debug("Current disrectory: " + System.getProperty("user.dir"));
+//        } else {
+//            LogManager.getLogger("ua.cn.al").setLevel(org.apache.log4j.Level.ERROR);
+//        }
         
         cp = new CommandProcessor(args.storefile, args.storealias, args.storepass, args.keypass);
         ParseResult sc = cmdParser.getParseResult().subcommand();
