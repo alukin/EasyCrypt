@@ -63,11 +63,11 @@ public class Main {
             System.out.println("with full ECC upport nbased on BouncyCastle crypto libary.");
             System.out.println(" ");
             usage(cmdParser);
-            System.out.println("Supported properties. Some are quite idiotic, thanks to X.people. Please google for OID for more info.\n");
+            System.out.println("\nSupported properties. Some are quite frustratying, thanks to X guys. Please google for OID for more info.\n");
             Map<String, String> sa = CertificateRequestData.getSupportedAttributesHelp();
-            for (String key : sa.keySet()) {
+            sa.keySet().forEach(key -> {
                 System.out.println(key + "  " + sa.get(key));
-            }
+            });
             System.exit(PosixExitCodes.OK.exitCode());
         }
         
@@ -79,15 +79,15 @@ public class Main {
         }
         
         cp = new CommandProcessor(args.storefile, args.storealias, args.storepass, args.keypass);
+        String commandName = cmdParser.getParseResult().subcommand().commandSpec().name();
         
-        if (cmdParser.getCommand() == null) {
+        if (commandName == null || commandName.isBlank()) {
              usage(cmdParser);
-
-        } else if (cmdParser.getCommandName().equals("keystore")) {
+        } else if (commandName.equals("keystore")) {
             log.error("keystore functionality  is not implemented yet");
-        } else if (cmdParser.getCommand().equals("x509")) {
+        } else if (commandName.equals("x509")) {
             cp.displayX509(args.infile);
-        } else if (cmdParser.getCommand().equals("certreq")) {
+        } else if (commandName.equals("certreq")) {
             if(certreq.show){
                 cp.displayPKCS10(args.infile);
                 System.exit(PosixExitCodes.OK.exitCode());

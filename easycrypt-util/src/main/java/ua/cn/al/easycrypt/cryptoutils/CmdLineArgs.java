@@ -26,13 +26,13 @@ public class CmdLineArgs {
     //Main parameter
 //    @Option(description = "Command to run: keystore, x509, certreq")    
     public String command;
-    @Option(names = {"--version"}, description = "Show version and exit")
+    @Option(names = {"--version", "-V"}, description = "Show version and exit")
     public boolean show_version = false;  
     @Option(names = {"--debug", "-d"}, description = "Debug mode")
     public boolean debug = false;
     @Option(names = {"--verbose", "-v"}, description = "Verbosity level 0-9")
     public Integer verbose = 1;
-    @Option(names = "--help", help = true, description = "Print help message")
+    @Option(names = {"--help", "-h"}, help = true, description = "Print help message")
     public boolean help;
     @Option(names = {"--keypass", "-p"}, description = "Passphrase for private key encryption") //password = true)
     public String keypass;
