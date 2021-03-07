@@ -16,8 +16,6 @@ import ua.cn.al.easycrypt.CryptoParams;
 import ua.cn.al.easycrypt.CryptoNotValidException;
 import ua.cn.al.easycrypt.impl.AbstractKeyGenerator;
 import ua.cn.al.easycrypt.impl.NotRandom;
-import java.nio.BufferOverflowException;
-import java.nio.ByteBuffer;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;

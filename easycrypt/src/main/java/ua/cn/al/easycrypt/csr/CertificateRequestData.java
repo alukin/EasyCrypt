@@ -38,7 +38,7 @@ import java.util.Properties;
  */
 public class CertificateRequestData {
     private static final Logger log = LoggerFactory.getLogger(CertificateRequestData.class);
-    private static final Map<String, String> sa = new HashMap<>();
+    private static final Map<String, String> sa = setSupportedAttributes();
     public static final String SUBJ_PRFX = "subject.";
     public static final String ATTR_PRFX = "attribute.";
 
@@ -59,7 +59,8 @@ public class CertificateRequestData {
 
     private final Map<String, String> certDataMap = new HashMap<>();
 
-    private static void setSupportedAttributes() {
+    private static Map<String, String> setSupportedAttributes() {
+        Map<String, String> sa = new HashMap<>();
         sa.put(SUBJ_PRFX + "CN", "Canonical common name, main name of subject. String(64). OID=2.5.4.3");
         sa.put(SUBJ_PRFX + "C", "Country code. String(2). OID=2.5.4.6");
         sa.put(SUBJ_PRFX + "O", "Organization name. String(64). OID=2.5.4.10");
@@ -93,10 +94,11 @@ public class CertificateRequestData {
                 + "OID=2.5.4.15");
         sa.put(SUBJ_PRFX + "TelephoneNumber", "Telephone Number. CCITT Rec. E.123 . String. OID=2.5.4.20");
         sa.put(SUBJ_PRFX + "Name", "Supertype attribute. OID=2.5.4.41");
-        sa.put(SUBJ_PRFX + "organizationIdentifier", "Holds an identification of an organization different from the organization. String. nameOID=2.5.4.97");
-        sa.put(ATTR_PRFX + "subjaltnames.registeredid", "TODO:  addd description, 1.3.6.78.91.235");
+        sa.put(SUBJ_PRFX + "organizationIdentifier", "Holds an identification of an organization different from the organization. String.  OID=2.5.4.97");
+        sa.put(ATTR_PRFX + "subjaltnames.registeredid", "TODO:  addd description, OID=1.3.6.78.91.235");
         sa.put(ATTR_PRFX + "subjaltnames.dnsname", " DNS name");
         sa.put(ATTR_PRFX + "subjaltnames.ipaddress", "IP address");
+        return sa;
     }
 
     public CertificateRequestData(CSRType type) {

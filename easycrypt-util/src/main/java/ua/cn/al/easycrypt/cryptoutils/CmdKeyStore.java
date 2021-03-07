@@ -12,13 +12,14 @@
 
 package ua.cn.al.easycrypt.cryptoutils;
 
-import com.beust.jcommander.Parameters;
+import picocli.CommandLine.Command;
+
 
 /**
  *
  * @author alukin@gmail.com
  */
-@Parameters(commandDescription = "Manipulate keystore")
+@Command(name="keystore", description = "Manipulate keystore")
 public class CmdKeyStore {
     
 }

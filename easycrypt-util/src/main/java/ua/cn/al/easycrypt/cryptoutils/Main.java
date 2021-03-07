@@ -11,14 +11,14 @@
  */
 package ua.cn.al.easycrypt.cryptoutils;
 
-import com.beust.jcommander.JCommander;
 import ua.cn.al.easycrypt.csr.CertificateRequestData;
 import java.io.File;
 import java.util.Properties;
 import java.util.Map;
-import org.apache.log4j.LogManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import picocli.CommandLine;
+import picocli.CommandLine.ParseResult;
 
 /**
  *
@@ -29,29 +29,30 @@ public class Main {
     
     private static final Logger log = LoggerFactory.getLogger(Main.class);
 
-    /**
-     * @param argv the command line arguments
-     */
+    public static void usage(CommandLine cmdParser){
+       cmdParser.usage(System.out);
+    }
+    
     public static void main(String[] argv) {
         CmdLineArgs args = new CmdLineArgs();
         CmdKeyStore keystore = new CmdKeyStore();
         CmdCertReq certreq = new CmdCertReq();
         CmdX509Cert x509 = new CmdX509Cert();
         CommandProcessor cp;
+
+        CommandLine cmdParser = new CommandLine(args);
+        cmdParser.addSubcommand(keystore);
+        cmdParser.addSubcommand(certreq);
+        cmdParser.addSubcommand(x509);
         
-        JCommander jc = JCommander.newBuilder()
-                .addObject(args)
-                .addCommand("keystore", keystore)
-                .addCommand("x509", x509)
-                .addCommand("certreq", certreq)
-                .build();
-        jc.setProgramName("cryptoutils");
+        cmdParser.setCommandName("easycryptutil");
+        
         try {
-            jc.parse(argv);
+            cmdParser.parseArgs(argv);
         } catch (RuntimeException ex) {
             System.err.println("Error parsing command line arguments.");
             System.err.println(ex.getMessage());
-            jc.usage();
+            usage(cmdParser);
             System.exit(PosixExitCodes.EX_USAGE.exitCode());
         }
         if(args.show_version){
@@ -62,31 +63,37 @@ public class Main {
             System.out.println("This is \"swiss army knife\" for CSR, certificates, keys \n and other cryptography related tasks");
             System.out.println("with full ECC upport nbased on BouncyCastle crypto libary.");
             System.out.println(" ");
-            jc.usage();
-            System.out.println("Supported properties. Some are quite idiotic, thanks to X.people. Please google for OID for more info.\n");
+            usage(cmdParser);
+            System.out.println("\nSupported properties. Some are quite frustratying, thanks to X guys. Please google for OID for more info.\n");
             Map<String, String> sa = CertificateRequestData.getSupportedAttributesHelp();
-            for (String key : sa.keySet()) {
+            sa.keySet().forEach(key -> {
                 System.out.println(key + "  " + sa.get(key));
-            }
+            });
             System.exit(PosixExitCodes.OK.exitCode());
         }
-        
-        if (args.debug) {
-            LogManager.getLogger("ua.cn.al").setLevel(org.apache.log4j.Level.DEBUG);
-            log.debug("Current disrectory: " + System.getProperty("user.dir"));
-        } else {
-            LogManager.getLogger("ua.cn.al").setLevel(org.apache.log4j.Level.ERROR);
-        }
+//TODO: log level setting        
+//        if (args.debug) {
+//            LogManager.getLogger("ua.cn.al").setLevel(org.apache.log4j.Level.DEBUG);
+//            log.debug("Current disrectory: " + System.getProperty("user.dir"));
+//        } else {
+//            LogManager.getLogger("ua.cn.al").setLevel(org.apache.log4j.Level.ERROR);
+//        }
         
         cp = new CommandProcessor(args.storefile, args.storealias, args.storepass, args.keypass);
+        ParseResult sc = cmdParser.getParseResult().subcommand();
         
-        if (jc.getParsedCommand() == null) {
-            jc.usage();
-        } else if (jc.getParsedCommand().equalsIgnoreCase("keystore")) {
+        String commandName ="";
+        if(sc!=null){
+          commandName = sc.commandSpec().name();
+        }
+        
+        if (commandName.isEmpty()) {
+             usage(cmdParser);
+        } else if (commandName.equals("keystore")) {
             log.error("keystore functionality  is not implemented yet");
-        } else if (jc.getParsedCommand().equalsIgnoreCase("x509")) {
+        } else if (commandName.equals("x509")) {
             cp.displayX509(args.infile);
-        } else if (jc.getParsedCommand().equalsIgnoreCase("certreq")) {
+        } else if (commandName.equals("certreq")) {
             if(certreq.show){
                 cp.displayPKCS10(args.infile);
                 System.exit(PosixExitCodes.OK.exitCode());

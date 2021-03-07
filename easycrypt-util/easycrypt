@@ -1,3 +1,8 @@
 #!/bin/bash
 JAR_PATH=./target/easycrypt.jar
-java -jar ${JAR_PATH} $@
+
+if [ -x ./target/easycrypt ] ; then
+    ./target/easycrypt $@
+else     
+    java -jar ${JAR_PATH} $@
+fi    
