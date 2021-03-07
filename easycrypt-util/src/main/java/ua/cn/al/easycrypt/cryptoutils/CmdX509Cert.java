@@ -10,15 +10,19 @@
  * GNU General Public License for more details.
  */
 
-package io.firstbridge.cryptoutils;
+package ua.cn.al.easycrypt.cryptoutils;
 
-import com.beust.jcommander.Parameters;
+import picocli.CommandLine.Command;
+import picocli.CommandLine.Option;
 
 /**
  *
  * @author alukin@gmail.com
  */
-@Parameters(commandDescription = "Manipulate keystore")
-public class CmdKeyStore {
-    
+@Command(name="x509", description = "Display, check X.509 certificate, sign PKCS#10 CSR")
+public class CmdX509Cert {
+    @Option(names = {"--show", "-S"}, description = "Parse and show X.509 certificate")
+    public boolean show;
+    @Option(names = {"--signby"}, description = "SIGN PKCS#10 CSR by given CA X.509 certificate")
+    public String signby;
 }

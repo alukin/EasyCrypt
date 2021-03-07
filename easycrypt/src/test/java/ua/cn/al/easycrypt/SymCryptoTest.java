@@ -40,7 +40,7 @@ public class SymCryptoTest extends TestBase {
     private static final SecureRandom srand = new SecureRandom();
     private static final int RANDOM_BYTES_NUMBER = 4096;
 
-    private static CryptoParams params = CryptoConfig.createDefaultParams();
+    private static final CryptoParams params = CryptoConfig.createDefaultParams();
         
 
     @BeforeAll
@@ -133,8 +133,6 @@ public class SymCryptoTest extends TestBase {
             SymCryptor instance_e = new SymJCEImpl(params);
             instance_e.setSalt(salt);
             instance_e.setNonce(null); //generate random nonce
-            
-            byte[] _nonce = instance_e.getNonce();
             
             instance_e.setKey(key);
             AEADCiphered encrypted = instance_e.encryptWithAEAData(plain, OPEN_TEXT.getBytes());

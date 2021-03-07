@@ -10,21 +10,20 @@
  * GNU General Public License for more details.
  */
 
-package io.firstbridge.cryptoutils;
+package ua.cn.al.easycrypt.cryptoutils;
 
-import com.beust.jcommander.IParameterValidator;
-import com.beust.jcommander.ParameterException;
-import java.util.Arrays;
+
+import picocli.CommandLine.ParameterException;
 
 /**
- *
- * @author al
+ * TODOЖ ку-шьздуьуте
+ * @author Oleksiy Lukin alukin@gmail.com
  */
-public class RqTypeValidator implements IParameterValidator {
+public class RqTypeValidator { // implements IParameterValidator {
     
     public static final String[] RQ_TYPES = {"personal", "host", "softsign"};
 
-    @Override
+
     public void validate(String name, String value) throws ParameterException {
         boolean found = false;
         for (String p : RQ_TYPES) {
@@ -34,7 +33,7 @@ public class RqTypeValidator implements IParameterValidator {
             }
         }
         if (!found) {
-            throw new ParameterException("Parameter " + name + " should be one of:" + Arrays.toString(RQ_TYPES) + " (found " + value + ")");
+            // throw new ParameterException( "Parameter " + name + " should be one of:" + Arrays.toString(RQ_TYPES) + " (found " + value + ")");
         }
     }
     

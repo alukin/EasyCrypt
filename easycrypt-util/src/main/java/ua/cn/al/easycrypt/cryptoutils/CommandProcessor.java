@@ -9,7 +9,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  */
-package io.firstbridge.cryptoutils;
+package ua.cn.al.easycrypt.cryptoutils;
 
 import ua.cn.al.easycrypt.CryptoConfig;
 import ua.cn.al.easycrypt.KeyReader;
@@ -19,7 +19,6 @@ import ua.cn.al.easycrypt.KeyGenerator;
 import ua.cn.al.easycrypt.CryptoNotValidException;
 import ua.cn.al.easycrypt.CryptoParams;
 import ua.cn.al.easycrypt.container.PKCS12KeyStore;
-import ua.cn.al.easycrypt.csr.CertSubject;
 import ua.cn.al.easycrypt.csr.X509CertOperations;
 import ua.cn.al.easycrypt.impl.KeyReaderImpl;
 import ua.cn.al.easycrypt.impl.KeyWriterImpl;
@@ -40,15 +39,9 @@ import java.security.cert.X509Certificate;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
-import javax.imageio.plugins.tiff.GeoTIFFTagSet;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-import org.bouncycastle.asn1.ASN1Encodable;
-import org.bouncycastle.asn1.ASN1ObjectIdentifier;
-import org.bouncycastle.asn1.pkcs.Attribute;
-import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.pkcs.PKCS10CertificationRequest;
 import org.slf4j.Logger;

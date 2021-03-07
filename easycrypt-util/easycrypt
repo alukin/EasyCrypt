@@ -1,4 +1,8 @@
 #!/bin/bash
-VERSION=1.0.1
-JAR_PATH=./target/easycryptutil-${VERSION}-jar-with-dependencies.jar
-java -jar ${JAR_PATH} $@
+JAR_PATH=./target/easycrypt.jar
+
+if [ -x ./target/easycrypt ] ; then
+    ./target/easycrypt $@
+else     
+    java -jar ${JAR_PATH} $@
+fi    

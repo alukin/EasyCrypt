@@ -5,12 +5,12 @@
     <parent>
         <groupId>ua.cn.al</groupId>
         <artifactId>easycrypt-top</artifactId>
-        <version>1.0.1</version>
+        <version>1.1.0</version>
     </parent>
 
     <artifactId>easycrypt</artifactId>
     <name>easycrypt</name>
-    <version>1.0.1</version>
+    <version>1.1.0</version>
     <packaging>jar</packaging>
 
     <dependencies>
@@ -35,6 +35,11 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
+ 	<dependency>
+		<groupId>org.projectlombok</groupId>
+		<artifactId>lombok</artifactId>
+		<scope>provided</scope>
+	</dependency>       
         <!-- unit tests --> 
         <dependency>
             <groupId>org.junit.platform</groupId>
@@ -59,7 +64,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <configuration>
-                    <destDir>docs/api/fbcrypto</destDir>
+                    <destDir>docs/api/easycrypt</destDir>
                     <doclint>none</doclint>
                 </configuration>
             </plugin>
