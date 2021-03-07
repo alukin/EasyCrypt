@@ -19,6 +19,7 @@ import org.apache.log4j.LogManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import picocli.CommandLine;
+import picocli.CommandLine.ParseResult;
 
 /**
  *
@@ -44,7 +45,8 @@ public class Main {
         cmdParser.addSubcommand(keystore);
         cmdParser.addSubcommand(certreq);
         cmdParser.addSubcommand(x509);
-
+        
+        cmdParser.setCommandName("easycryptutil");
         
         try {
             cmdParser.parseArgs(argv);
@@ -79,9 +81,14 @@ public class Main {
         }
         
         cp = new CommandProcessor(args.storefile, args.storealias, args.storepass, args.keypass);
-        String commandName = cmdParser.getParseResult().subcommand().commandSpec().name();
+        ParseResult sc = cmdParser.getParseResult().subcommand();
         
-        if (commandName == null || commandName.isBlank()) {
+        String commandName ="";
+        if(sc!=null){
+          commandName = sc.commandSpec().name();
+        }
+        
+        if (commandName.isEmpty()) {
              usage(cmdParser);
         } else if (commandName.equals("keystore")) {
             log.error("keystore functionality  is not implemented yet");
