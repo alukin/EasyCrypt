@@ -13,7 +13,8 @@
 
 package ua.cn.al.easycrypt.cryptoutils;
 
-import com.beust.jcommander.Parameter;
+import picocli.CommandLine.Option;
+
 
 /**
  * Command line arguments for cryptoutils
@@ -23,27 +24,27 @@ import com.beust.jcommander.Parameter;
 public class CmdLineArgs {
     
     //Main parameter
-    @Parameter(description = "Command to run: keystore, x509, certreq")    
+//    @Option(description = "Command to run: keystore, x509, certreq")    
     public String command;
-    @Parameter(names = {"--version"}, description = "Show version and exit")
+    @Option(names = {"--version"}, description = "Show version and exit")
     public boolean show_version = false;  
-    @Parameter(names = {"--debug", "-d"}, description = "Debug mode")
+    @Option(names = {"--debug", "-d"}, description = "Debug mode")
     public boolean debug = false;
-    @Parameter(names = {"--verbose", "-v"}, description = "Verbosity level 0-9")
+    @Option(names = {"--verbose", "-v"}, description = "Verbosity level 0-9")
     public Integer verbose = 1;
-    @Parameter(names = "--help", help = true, description = "Print help message")
+    @Option(names = "--help", help = true, description = "Print help message")
     public boolean help;
-     @Parameter(names = {"--keypass", "-p"}, description = "Passphrase for private key encryption") //password = true)
+    @Option(names = {"--keypass", "-p"}, description = "Passphrase for private key encryption") //password = true)
     public String keypass;
-    @Parameter(names = {"--storefile", "-f"}, description = "Path to PKCS#12 key store file. If not set, PEM output is default")
+    @Option(names = {"--storefile", "-f"}, description = "Path to PKCS#12 key store file. If not set, PEM output is default")
     public String storefile;
-    @Parameter(names = {"--storealias", "-a"}, description = "Alias in PKCS#12 key store")
+    @Option(names = {"--storealias", "-a"}, description = "Alias in PKCS#12 key store")
     public String storealias;
-    @Parameter(names = {"--storepass", "-s"}, description = "Passphrase for key store") //password = true)
+    @Option(names = {"--storepass", "-s"}, description = "Passphrase for key store") //password = true)
     public String storepass;
-    @Parameter(names = {"--out", "-o"}, description = "Output path. Defaults: newcert.pem, newreq.pem, newcert_pvtkey.pem")
+    @Option(names = {"--out", "-o"}, description = "Output path. Defaults: newcert.pem, newreq.pem, newcert_pvtkey.pem")
     public String outfile="";
-     @Parameter(names = {"--input", "-i"}, description = "Input path")
+    @Option(names = {"--input", "-i"}, description = "Input path")
     public String infile="newcert.pem";    
 
 }
