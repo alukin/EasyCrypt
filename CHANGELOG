@@ -6,7 +6,7 @@ Release 1.0.1
 
 Release 1.1.0
     Streaming crypto interfaces, please see StreamingExample.java in easycrypt-examples
-    Update to lates Bouncy Castle library (1.68)
+    Update to latest Bouncy Castle library (1.68)
     JCommander replaced by PicoCli in easycritp-util to be able to generate native image
     Native image builds with GraalVM 21.0.0, use "-P native" with maven to build native exacutable of easycryptutil
     Code cleanup
