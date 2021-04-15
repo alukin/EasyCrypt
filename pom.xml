@@ -18,6 +18,9 @@
         <module>easycrypt</module>
         <module>easycrypt-util</module>
         <module>easycrypt-examples</module>
+        <module>easycrypt-identity</module>
+        <module>easycrypt-identity-examples</module>
+        
         <!-- you need GraalVM installed to build this -->
         <!--        <module>graalvm-example</module> -->
     </modules>
