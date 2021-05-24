@@ -23,6 +23,10 @@ ___The Goals of EasyCrypt design are:___
 * [EasyCrypt library](easycrypt) Java library, builds into a JAR file
 * [EasyCrypt util](easycrypt-util) OpenSSL-like utility
 * [EasyCrypt examples](easycrypt-examples) Examples of code
+* [EasyCrypt identity](easycrypt-dentity) X.509 based identity library
+* [EasyCrypt identity examples](easycrypt-dentity-examples) X.509 based identity library examples
+
+For component description and other documentation, please see REAME.md files in the directory of the component.
 
 ## History
 
@@ -35,12 +39,12 @@ libraries.
 
 ## Copyright
 
-EasyCrypt is free software and licensed under GPL v.2. Dual licensing is possible.
+EasyCrypt is free software and licensed under GPL v.2. Dual licensing is possible, please conntact authors.
 
 ## Releases
 
-The current release is 1.1.0. It features streaming crypto and digesting interfaces, as well as native builds with
-GraalVM.
+Current release is 1.2.0. It features streaming crypto and digesting interfaces, native builds with GraalVM, 
+and identity library with examples
 
 ### How do I get set up? ###
 
