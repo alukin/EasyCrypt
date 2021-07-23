@@ -75,20 +75,17 @@ public class CryptoSignatureImpl implements CryptoSignature {
         this.ourPublicKey = keys.getOurPublicKey();
         this.privateKey = keys.getPrivateKey();
         this.theirPublicKey = keys.getTheirPublicKey();
-        try {
-            this.signature = Signature.getInstance(params.getSignatureAlgorythm());
-        } catch (NoSuchAlgorithmException ex) {
-            log.error("Signature spec " + params.getSignatureAlgorythm() + " is not supported.");
-        }
     }
 
     @Override
     public byte[] sign(byte[] message) throws CryptoNotValidException {
         try {
+            signature = Signature.getInstance(params.getSignatureAlgorythm());
+            System.out.println("private key: " + privateKey.getEncoded());
             signature.initSign(privateKey);
             signature.update(message);
             return signature.sign();
-        } catch (InvalidKeyException | SignatureException ex) {
+        } catch (InvalidKeyException | SignatureException | NoSuchAlgorithmException ex) {
             log.error("Signing error", ex);
             throw new CryptoNotValidException("Signing error", ex);
         }
@@ -97,10 +94,10 @@ public class CryptoSignatureImpl implements CryptoSignature {
     @Override
     public boolean verify(byte[] message, byte[] signature) {
         try {
-            Signature sig = Signature.getInstance(params.getSignatureAlgorythm());
-            sig.initVerify(theirPublicKey);
-            sig.update(message);
-            return sig.verify(signature);
+            this.signature = Signature.getInstance(params.getSignatureAlgorythm());
+            this.signature.initVerify(theirPublicKey);
+            this.signature.update(message);
+            return this.signature.verify(signature);
         } catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException ex) {
             log.warn("Signature check exception", ex);
         }
@@ -206,10 +203,10 @@ public class CryptoSignatureImpl implements CryptoSignature {
         }
 
         try {
-            Signature sig = Signature.getInstance(params.getSignatureAlgorythm());
-            sig.initVerify(theirPublicKey);
-            sig.update(message);
-            return sig.verify(asnSignature);
+            this.signature = Signature.getInstance(params.getSignatureAlgorythm());
+            this.signature.initVerify(theirPublicKey);
+            this.signature.update(message);
+            return this.signature.verify(asnSignature);
         } catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException ex) {
             log.warn("Signature check exception", ex);
         }
