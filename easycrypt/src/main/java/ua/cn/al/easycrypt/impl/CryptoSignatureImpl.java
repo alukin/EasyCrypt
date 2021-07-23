@@ -81,7 +81,6 @@ public class CryptoSignatureImpl implements CryptoSignature {
     public byte[] sign(byte[] message) throws CryptoNotValidException {
         try {
             signature = Signature.getInstance(params.getSignatureAlgorythm());
-            System.out.println("private key: " + privateKey.getEncoded());
             signature.initSign(privateKey);
             signature.update(message);
             return signature.sign();
