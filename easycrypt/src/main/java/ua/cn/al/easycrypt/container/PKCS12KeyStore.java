@@ -1,13 +1,15 @@
 /*
+ * Copyright (C) 2018-2021 Oleksiy Lukin <alukin@gmail.com> and CONTRIBUTORS
+ * 
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation, version 2
+ * modify it under the terms of the GNU LESSER GENERAL PUBLIC LICENSE
+ * as published by the Free Software Foundation, version 3
  * of the License.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details. *
+ * LICENSE
  */
 package ua.cn.al.easycrypt.container;
 
@@ -52,10 +54,7 @@ public class PKCS12KeyStore {
 
     public boolean openKeyStore(String path, String password) {
         boolean res = true;
-        InputStream is = null;
-        try {
-            File file = new File(path);
-            is = new FileInputStream(file);
+        try ( InputStream is = new FileInputStream(new File(path))){
             keystore = KeyStore.getInstance(KEYSTORE_TYPE, CryptoConfig.getProvider());
             keystore.load(is, password.toCharArray());
             Enumeration<String> enumeration = keystore.aliases();
@@ -71,16 +70,8 @@ public class PKCS12KeyStore {
         } catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException ex) {
             log.error("File" + path + " is not loadable", ex);
             res = false;
-        } finally {
-            try {
-                if (is != null) {
-                    is.close();
-                }
-            } catch (IOException ex) {
-                log.error("File" + path + " is not loadable", ex);
-                res = false;
-            }
         }
+        
         return res;
     }
 

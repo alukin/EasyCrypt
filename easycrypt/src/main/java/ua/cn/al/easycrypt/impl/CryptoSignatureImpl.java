@@ -1,15 +1,17 @@
 /*
+ * Copyright (C) 2018-2021 Oleksiy Lukin <alukin@gmail.com> and CONTRIBUTORS
+ * 
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation, version 2
+ * modify it under the terms of the GNU LESSER GENERAL PUBLIC LICENSE
+ * as published by the Free Software Foundation, version 3
  * of the License.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
+ * LICENSE
  */
+
 package ua.cn.al.easycrypt.impl;
 
 import ua.cn.al.easycrypt.AsymKeysHolder;
@@ -73,20 +75,16 @@ public class CryptoSignatureImpl implements CryptoSignature {
         this.ourPublicKey = keys.getOurPublicKey();
         this.privateKey = keys.getPrivateKey();
         this.theirPublicKey = keys.getTheirPublicKey();
-        try {
-            this.signature = Signature.getInstance(params.getSignatureAlgorythm());
-        } catch (NoSuchAlgorithmException ex) {
-            log.error("Signature spec " + params.getSignatureAlgorythm() + " is not supported.");
-        }
     }
 
     @Override
     public byte[] sign(byte[] message) throws CryptoNotValidException {
         try {
+            signature = Signature.getInstance(params.getSignatureAlgorythm());
             signature.initSign(privateKey);
             signature.update(message);
             return signature.sign();
-        } catch (InvalidKeyException | SignatureException ex) {
+        } catch (InvalidKeyException | SignatureException | NoSuchAlgorithmException ex) {
             log.error("Signing error", ex);
             throw new CryptoNotValidException("Signing error", ex);
         }
@@ -95,10 +93,10 @@ public class CryptoSignatureImpl implements CryptoSignature {
     @Override
     public boolean verify(byte[] message, byte[] signature) {
         try {
-            Signature sig = Signature.getInstance(params.getSignatureAlgorythm());
-            sig.initVerify(theirPublicKey);
-            sig.update(message);
-            return sig.verify(signature);
+            this.signature = Signature.getInstance(params.getSignatureAlgorythm());
+            this.signature.initVerify(theirPublicKey);
+            this.signature.update(message);
+            return this.signature.verify(signature);
         } catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException ex) {
             log.warn("Signature check exception", ex);
         }
@@ -204,10 +202,10 @@ public class CryptoSignatureImpl implements CryptoSignature {
         }
 
         try {
-            Signature sig = Signature.getInstance(params.getSignatureAlgorythm());
-            sig.initVerify(theirPublicKey);
-            sig.update(message);
-            return sig.verify(asnSignature);
+            this.signature = Signature.getInstance(params.getSignatureAlgorythm());
+            this.signature.initVerify(theirPublicKey);
+            this.signature.update(message);
+            return this.signature.verify(asnSignature);
         } catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException ex) {
             log.warn("Signature check exception", ex);
         }

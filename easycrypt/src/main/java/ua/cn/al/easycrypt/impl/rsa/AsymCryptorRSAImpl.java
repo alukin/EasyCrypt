@@ -1,14 +1,17 @@
 /*
+ * Copyright (C) 2018-2021 Oleksiy Lukin <alukin@gmail.com> and CONTRIBUTORS
+ * 
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation, version 2
+ * modify it under the terms of the GNU LESSER GENERAL PUBLIC LICENSE
+ * as published by the Free Software Foundation, version 3
  * of the License.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * LICENSE
  */
+
 package ua.cn.al.easycrypt.impl.rsa;
 
 import ua.cn.al.easycrypt.CryptoParams;
@@ -47,8 +50,7 @@ public class AsymCryptorRSAImpl extends AbstractAsymCryptor {
     public byte[] encrypt(byte[] plain) throws CryptoNotValidException {
         try {
             iesCipher.init(Cipher.ENCRYPT_MODE, theirPublicKey);
-            iesCipher.update(plain);
-            byte[] encrypted = iesCipher.doFinal();
+            byte[] encrypted = iesCipher.doFinal(plain);
             return encrypted;
         } catch (BadPaddingException|IllegalBlockSizeException|InvalidKeyException ex) {
             log.error(ex.getMessage());
