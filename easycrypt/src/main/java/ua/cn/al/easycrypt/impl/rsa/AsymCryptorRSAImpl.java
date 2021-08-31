@@ -50,8 +50,7 @@ public class AsymCryptorRSAImpl extends AbstractAsymCryptor {
     public byte[] encrypt(byte[] plain) throws CryptoNotValidException {
         try {
             iesCipher.init(Cipher.ENCRYPT_MODE, theirPublicKey);
-            iesCipher.update(plain);
-            byte[] encrypted = iesCipher.doFinal();
+            byte[] encrypted = iesCipher.doFinal(plain);
             return encrypted;
         } catch (BadPaddingException|IllegalBlockSizeException|InvalidKeyException ex) {
             log.error(ex.getMessage());

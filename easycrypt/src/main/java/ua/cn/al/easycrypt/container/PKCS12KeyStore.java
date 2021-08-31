@@ -54,10 +54,7 @@ public class PKCS12KeyStore {
 
     public boolean openKeyStore(String path, String password) {
         boolean res = true;
-        InputStream is = null;
-        try {
-            File file = new File(path);
-            is = new FileInputStream(file);
+        try ( InputStream is = new FileInputStream(new File(path))){
             keystore = KeyStore.getInstance(KEYSTORE_TYPE, CryptoConfig.getProvider());
             keystore.load(is, password.toCharArray());
             Enumeration<String> enumeration = keystore.aliases();
@@ -73,16 +70,8 @@ public class PKCS12KeyStore {
         } catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException ex) {
             log.error("File" + path + " is not loadable", ex);
             res = false;
-        } finally {
-            try {
-                if (is != null) {
-                    is.close();
-                }
-            } catch (IOException ex) {
-                log.error("File" + path + " is not loadable", ex);
-                res = false;
-            }
         }
+        
         return res;
     }
 
