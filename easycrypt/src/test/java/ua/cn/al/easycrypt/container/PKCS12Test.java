@@ -129,10 +129,11 @@ public class PKCS12Test {
         PKCS12KeyStore instance = new PKCS12KeyStore();
         boolean res = instance.openKeyStore(pathToKeyStore, ksPassword);
         assertEquals(res, true);
-        String expResult ="DN=00042da0e32e07b61c9f0251fe627a9c,CN=test.cn.ua,L=Chernigiv,O=OleksiyLukin,OU=FB-cn,E=test@al.cn.ua,C=UA,BusinessCategory=00032da0e32e07b61c9f0251fe627a9c,UID=0002da0e32e07b61c9f0251fe627a9c,SERIALNUMBER=0001f1fcf82d132f9bb018ca6738a19f";
+        String expResult ="DN=00042da0e32e07b61c9f0251fe627a9c,CN=test.cn.ua,L=Chernigiv,O=OleksiyLukin,OU=FB-cn,EMAILADDR=test@al.cn.ua,C=UA,BusinessCategory=00032da0e32e07b61c9f0251fe627a9c,UID=0002da0e32e07b61c9f0251fe627a9c,SERIALNUMBER=0001f1fcf82d132f9bb018ca6738a19f";
         List<Certificate> cl = instance.getCertificates();
         X509Certificate c = (X509Certificate) cl.get(0);
-        String cn =c.getSubjectDN().getName();
+        //TODO: replace it, but names are important
+        String cn = c.getSubjectDN().getName();
         assertEquals(expResult, cn);
     }
 

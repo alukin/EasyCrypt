@@ -183,7 +183,7 @@ public class KeyReaderImpl implements KeyReader {
             String calias = (String) e.nextElement();
             if (alias.compareTo(calias) == 0) {
                 c = (X509Certificate) p12.getCertificate(alias);
-                Principal subject = c.getSubjectDN();
+                Principal subject = c.getSubjectX500Principal();
                 String[] subjectArray = subject.toString().split(",");
                 for (String s : subjectArray) {
                     String[] str = s.trim().split("=");
