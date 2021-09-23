@@ -129,16 +129,11 @@ public class PKCS12Test {
         PKCS12KeyStore instance = new PKCS12KeyStore();
         boolean res = instance.openKeyStore(pathToKeyStore, ksPassword);
         assertEquals(res, true);
-        String expResult ="DN=00042da0e32e07b61c9f0251fe627a9c,"
-                + "CN=test.cn.ua,L=Chernigiv,O=OleksiyLukin,"
-                + "OU=FB-cn,EMAILADDR=test@al.cn.ua,"
-                + "C=UA,BusinessCategory=00032da0e32e07b61c9f0251fe627a9c,"
-                + "UID=0002da0e32e07b61c9f0251fe627a9c,"
-                + "SERIALNUMBER=0001f1fcf82d132f9bb018ca6738a19f";
+        String expResult ="2.5.4.5=#13203030303166316663663832643133326639626230313863613637333861313966,UID=0002da0e32e07b61c9f0251fe627a9c,2.5.4.15=#0c203030303332646130653332653037623631633966303235316665363237613963,C=UA,1.2.840.113549.1.9.1=#160d7465737440616c2e636e2e7561,OU=FB-cn,O=OleksiyLukin,L=Chernigiv,CN=test.cn.ua,2.5.4.46=#13203030303432646130653332653037623631633966303235316665363237613963";
         List<Certificate> cl = instance.getCertificates();
         X509Certificate c = (X509Certificate) cl.get(0);
         //TODO: replace it, but names are important
-        String cn = c.getSubjectDN().getName();
+        String cn = c.getSubjectX500Principal().getName();
         assertEquals(expResult, cn);
     }
 
