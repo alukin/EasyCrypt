@@ -75,10 +75,10 @@ public class X509CertOperationsTest extends TestBase {
         
         X509CertOperations instance = new X509CertOperationsImpl(params);
         X509Certificate result = instance.createSelfSignedX509v3(kp, certData);
-        System.out.println(result.getIssuerDN().toString());
-        Map<String,String> subjAtrributes = CertSubject.byNamesFromPrincipal(result.getIssuerDN());
+        System.out.println(result.getIssuerX500Principal().toString());
+        Map<String,String> subjAtrributes = CertSubject.byNamesFromPrincipal(result.getIssuerX500Principal());
         assertEquals("OleksiyLukin", subjAtrributes.get("O"));
-        assertEquals("a.lukin@gmail.com", subjAtrributes.get("E"));
+        assertEquals("a.lukin@gmail.com", subjAtrributes.get("EMAILADDRESS"));
         KeyWriter kw = new KeyWriterImpl();
         kw.writeX509CertificatePEM(CERT_FILE, result);
     }
