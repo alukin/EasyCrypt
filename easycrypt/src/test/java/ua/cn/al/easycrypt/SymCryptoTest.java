@@ -47,6 +47,7 @@ public class SymCryptoTest extends TestBase {
 
     @BeforeAll
     public static void setUpClass() {
+        mkdirs(KEY_FILE);
         System.out.println("Preparing random plain file and random salt+key");
         //write random file of plain text
         byte[] rt = new byte[RANDOM_BYTES_NUMBER];
