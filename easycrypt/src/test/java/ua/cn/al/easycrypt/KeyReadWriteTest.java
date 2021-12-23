@@ -53,7 +53,7 @@ public class KeyReadWriteTest extends TestBase {
     
     @BeforeAll
     public static void setUpClass() {
-        mkdirs("testdata/out");
+        mkdirs(PVT_KEY_PKCS8_OUT_FILE);
         Security.setProperty("crypto.policy", "unlimited");
         Security.addProvider(new BouncyCastleProvider());
 

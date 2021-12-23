@@ -41,7 +41,7 @@ public class CryptedWalletTest extends TestBase {
     
     @BeforeAll
     public static void setUpClass() {
-        TestBase.mkdirs("testdata/out");
+        TestBase.mkdirs(OUT_WALLET_FILE);
         nr.setSeed(NR_SEED);
     }
     

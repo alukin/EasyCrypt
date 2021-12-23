@@ -10,6 +10,7 @@
 
     <artifactId>easycrypt</artifactId>
     <name>easycrypt</name>
+    <version>1.2.1</version>
     <packaging>jar</packaging>
 
     <dependencies>

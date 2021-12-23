@@ -80,6 +80,7 @@ public class AsymCryptoECCTest extends TestBase{
     @BeforeAll
     public static void setUpClass() {
         try {
+            mkdirs(OUT_FILE_ENCRYPT_ASYM_ALICE);
             System.out.println("Reading certificates and keys for asymmetric crypto tests");
             KeyReaderImpl kr = new KeyReaderImpl();
             X509Certificate test1_cert = kr.readX509CertPEMorDER(new FileInputStream(CERT_1));
