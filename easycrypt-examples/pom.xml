@@ -4,10 +4,12 @@
     <parent>
         <groupId>ua.cn.al</groupId>
         <artifactId>easycrypt-top</artifactId>
-        <version>1.2.1</version>
+        <version>1.2.2</version>
     </parent>
+    
     <artifactId>easycrypt-examples</artifactId>
     <packaging>jar</packaging>
+    
     <dependencies>
         <dependency>
             <groupId>ua.cn.al</groupId>

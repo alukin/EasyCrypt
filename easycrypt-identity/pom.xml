@@ -5,11 +5,10 @@
     <parent>
         <groupId>ua.cn.al</groupId>
         <artifactId>easycrypt-top</artifactId>
-        <version>1.2.1</version>
+        <version>1.2.2</version>
     </parent>
 
-    <name>esycrypt-identity</name>
-    <groupId>ua.cn.al</groupId>    
+    <name>esycrypt-identity</name>  
     <artifactId>easycrypt-identity</artifactId>
     <packaging>jar</packaging>
     
