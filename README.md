@@ -43,7 +43,7 @@ EasyCrypt is free software and licensed under LGPL v.3. Dual licensing is possib
 
 ## Releases
 
-Current release is 1.2.1. It features streaming crypto and digesting interfaces, native builds with GraalVM, 
+Current release is 1.2.2. It features streaming crypto and digesting interfaces, native builds with GraalVM, 
 and identity library with examples
 
 ### How do I get set up? ###
