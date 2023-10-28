@@ -140,7 +140,7 @@ public class KeyWriterImpl implements KeyWriter {
         try {
             JceOpenSSLPKCS8EncryptorBuilder encryptorBuilder = new JceOpenSSLPKCS8EncryptorBuilder(PKCS8Generator.AES_256_CBC);
             encryptorBuilder.setRandom(new SecureRandom());
-            encryptorBuilder.setPasssword(password.toCharArray());
+            encryptorBuilder.setPassword(password.toCharArray());
             OutputEncryptor encryptor = encryptorBuilder.build();  
             JcaPKCS8Generator generator = new JcaPKCS8Generator(key, encryptor);
             PemObject obj = generator.generate();

@@ -32,3 +32,4 @@ hs_err_pid*
 /easycrypt-identity/target/
 /easycrypt-identity-examples/target/
 /easycrypt-util/nbactions.xml
+/.idea/
