@@ -10,4 +10,10 @@ Release 1.1.0
     JCommander replaced by PicoCli in easycritp-util to be able to generate native image
     Native image builds with GraalVM 21.0.0, use "-P native" with maven to build native exacutable of easycryptutil
     Code cleanup
-    
+ ...
+ Release 1.1.0 - 1.2.3
+   Updates for new Java versions and dependencies
+ ...
+ Release 1.3.0
+    License change from GPL to Apache 2.0. Updates for Java 22, GraalVM 22, dependencies updates.
+    Due to security issues, Java 8,11 are unsupported from now. Lowest is 21.

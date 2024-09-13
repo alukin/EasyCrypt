@@ -13,7 +13,7 @@ ___The Goals of EasyCrypt design are:___
 
 1. Provide strong cryptography swiss knife with proper parameters of all algorithms.
 2. Easy of use. You do not need to know how different algorithms work inside or how to combine algorithms in the
-   cryptosystem. You choose the appropriate preset and just use it.
+   crypto system. You choose the appropriate preset and just use it.
 3. Extensibility. It should be easy to add new algorithms and configurations.
 4. It is written in Java and uses the BouncyCastle library. It can be used as-is in any JVM language. Java code of the
    library is mature and production-ready.
@@ -39,12 +39,12 @@ libraries.
 
 ## Copyright
 
-EasyCrypt is free software and licensed under LGPL v.3. Dual licensing is possible, please conntact authors.
+EasyCrypt is free software and licensed under Apache 2.0 License starting from version 1.3.0.
 
 ## Releases
 
-Current release is 1.2.2. It features streaming crypto and digesting interfaces, native builds with GraalVM, 
-and identity library with examples
+Current release is 1.3.0. It features streaming crypto and digesting interfaces, native builds with GraalVM, 
+and identity library with examples. Fore the security reason, the minimal Java version now is 21.
 
 ### How do I get set up? ###
 
