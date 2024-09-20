@@ -39,11 +39,11 @@ libraries.
 
 ## Copyright
 
-EasyCrypt is free software and licensed under Apache 2.0 License starting from version 1.3.0.
+EasyCrypt is free software and licensed under Apache 2.0 License starting from version 1.4.0.
 
 ## Releases
 
-Current release is 1.3.0. It features streaming crypto and digesting interfaces, native builds with GraalVM, 
+Current release is 1.4.0. It features streaming crypto and digesting interfaces, native builds with GraalVM, 
 and identity library with examples. Fore the security reason, the minimal Java version now is 21.
 
 ### How do I get set up? ###
