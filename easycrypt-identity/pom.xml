@@ -5,7 +5,7 @@
     <parent>
         <groupId>ua.cn.al</groupId>
         <artifactId>easycrypt-top</artifactId>
-        <version>1.3.0</version>
+        <version>1.4.0</version>
     </parent>
 
     <name>esycrypt-identity</name>  
@@ -75,9 +75,14 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
                 <configuration>
-                    <showDeprecation>true</showDeprecation>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>1.18.34</version>
+                        </path>                         
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
         </plugins>
