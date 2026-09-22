@@ -11,17 +11,17 @@
     <artifactId>easycryptutil</artifactId>
     <name>easycrypt-util</name>
     <packaging>jar</packaging>
-    
+
     <dependencies>
         <dependency>
             <groupId>ua.cn.al</groupId>
             <artifactId>easycrypt</artifactId>
-            <version>${project.version}</version> 
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>info.picocli</groupId>
             <artifactId>picocli</artifactId>
-        </dependency>             
+        </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -29,9 +29,8 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-jdk14</artifactId>
-        </dependency> 
-
-    </dependencies>      
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
@@ -43,22 +42,22 @@
                         <path>
                             <groupId>info.picocli</groupId>
                             <artifactId>picocli-codegen</artifactId>
-                            <version>4.6.1</version>
+                            <version>4.7.7</version>
                         </path>
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
-                            <version>1.18.34</version>
-                        </path>                          
+                            <version>1.18.48</version>
+                        </path>
                     </annotationProcessorPaths>
                     <compilerArgs>
                         <arg>-Aproject=${project.groupId}/${project.artifactId}</arg>
                     </compilerArgs>
                 </configuration>
-            </plugin>        
+            </plugin>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.3.0</version>
+                <version>3.8.0</version>
                 <configuration>
                     <archive>
                         <manifest>
@@ -69,7 +68,7 @@
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
-                    <finalName>easycrypt</finalName> 
+                    <finalName>easycrypt</finalName>
                     <appendAssemblyId>false</appendAssemblyId>
                 </configuration>
                 <executions>
@@ -82,8 +81,7 @@
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
     </build>
-    
+
 </project>

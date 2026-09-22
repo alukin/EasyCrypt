@@ -6,17 +6,17 @@
         <artifactId>easycrypt-top</artifactId>
         <version>1.4.0</version>
     </parent>
-    
+
     <artifactId>easycrypt-examples</artifactId>
     <packaging>jar</packaging>
-    
+
     <dependencies>
         <dependency>
             <groupId>ua.cn.al</groupId>
             <artifactId>easycrypt</artifactId>
-            <version>${project.version}</version> 
+            <version>${project.version}</version>
         </dependency>
-    </dependencies> 
+    </dependencies>
     <build>
         <plugins>
             <plugin>
@@ -27,8 +27,8 @@
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
-                            <version>1.18.34</version>
-                        </path>                         
+                            <version>1.18.48</version>
+                        </path>
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
