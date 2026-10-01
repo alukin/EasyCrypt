@@ -22,7 +22,12 @@ package ua.cn.al.easycrypt;
  */
 public class CryptoParams {
     public static final String PBKDF2_KEY_DERIVATION_FN = "PBKDF2WithHmacSHA256"; //produces 256 bit key
-    public static final int PBKDF2_ITERATIONS = 16;
+    /** Recommended default work factor for PBKDF2-HMAC-SHA256. */
+    public static final int PBKDF2_ITERATIONS = 600_000;
+    /** Historical EasyCrypt work factor, retained only for reading legacy data. */
+    public static final int PBKDF2_LEGACY_ITERATIONS = 16;
+    /** Minimum salt size for newly derived passphrase keys. */
+    public static final int PBKDF2_SALT_LEN_BYTES = 16;
     public static final int PBKDF2_KEYELEN = 256; //256 bits for AES
 
     public static final int GCM_AUTH_TAG_LEN_BITS = 128; //128 bits

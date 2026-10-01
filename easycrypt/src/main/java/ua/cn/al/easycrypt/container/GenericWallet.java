@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ua.cn.al.easycrypt.CryptoConfig;
 import ua.cn.al.easycrypt.CryptoFactory;
 import ua.cn.al.easycrypt.CryptoNotValidException;
+import ua.cn.al.easycrypt.CryptoParams;
 import ua.cn.al.easycrypt.Digester;
 
 import java.io.FileInputStream;
@@ -28,6 +29,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.security.SecureRandom;
 import java.util.Objects;
 
 /**
@@ -38,6 +40,7 @@ import java.util.Objects;
  */
 public class GenericWallet<T> {
 
+    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
     private final ObjectMapper mapper = new ObjectMapper();
     protected T wallet;
     private byte[] openData;
@@ -138,10 +141,49 @@ public class GenericWallet<T> {
         c.save(os, mapper.writeValueAsBytes(wallet), key, IV);
     }
 
+    /**
+     * Derives a key using EasyCrypt's historical 16-iteration settings.
+     * Existing ciphertext may depend on this behavior.
+     *
+     * @deprecated Use {@link #deriveKeyFromPassPhrase(String, byte[])} for new data.
+     */
+    @Deprecated
     public byte[] keyFromPassPhrase(String passPhrase, byte[] salt) throws CryptoNotValidException {
         CryptoFactory f = CryptoFactory.newInstance(CryptoConfig.createDefaultParams());
         Digester d = f.getDigesters();
         return d.PBKDF2(passPhrase, salt);
+    }
+
+    /**
+     * Derives a key for new data using PBKDF2-HMAC-SHA256 with the configured
+     * work factor. Callers must store the salt and iteration count with the
+     * encrypted data; the encrypted container's AES-GCM IV does not encode KDF
+     * parameters.
+     *
+     * @param passPhrase passphrase to derive from
+     * @param salt unique random salt of at least 16 bytes
+     * @return derived AES key
+     */
+    public byte[] deriveKeyFromPassPhrase(String passPhrase, byte[] salt) throws CryptoNotValidException {
+        CryptoFactory f = CryptoFactory.newInstance(CryptoConfig.createDefaultParams());
+        return f.getDigesters().deriveKeyFromPassPhrase(passPhrase, salt);
+    }
+
+    /**
+     * Derives a key with an explicit PBKDF2 iteration count. Persist the count
+     * and salt with ciphertext so the same key can be derived later.
+     */
+    public byte[] deriveKeyFromPassPhrase(String passPhrase, byte[] salt, int iterations)
+            throws CryptoNotValidException {
+        CryptoFactory f = CryptoFactory.newInstance(CryptoConfig.createDefaultParams());
+        return f.getDigesters().deriveKeyFromPassPhrase(passPhrase, salt, iterations);
+    }
+
+    /** Creates a random salt of the recommended length for new passphrase keys. */
+    public byte[] generatePassPhraseSalt() {
+        byte[] salt = new byte[CryptoParams.PBKDF2_SALT_LEN_BYTES];
+        SECURE_RANDOM.nextBytes(salt);
+        return salt;
     }
 
     public T getWallet() {
