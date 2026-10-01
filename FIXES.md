@@ -85,6 +85,8 @@ Publish only the reusable `easycrypt` and `easycrypt-identity` libraries for pub
 
 ## Phase 5: Repair keystore status and lifecycle behavior
 
+**Status:** Implemented. Successful saves return true; opens replace cached entries and clear stale state on failure; file streams are scoped; null passwords consistently mean an empty password and uninitialized/invalid operations fail cleanly.
+
 - Make `PKCS12KeyStore.save` return `true` after a successful store and `false` on failure.
 - Clear or rebuild aliases and certificates when opening another keystore so results do not accumulate across calls.
 - Close file streams with try-with-resources, including keystore creation.
