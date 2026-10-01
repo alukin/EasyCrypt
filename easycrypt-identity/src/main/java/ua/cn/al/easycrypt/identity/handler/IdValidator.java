@@ -38,9 +38,11 @@ public interface IdValidator {
      */
     boolean isSelfSigned(X509Certificate cert);
     /**
-     * Is this certificate signed by one of trusted certificates?
+     * Is this certificate directly signed by one of the configured signer
+     * certificates? This does not perform PKIX path building, validity-period,
+     * key-usage, policy, or revocation checks.
      * @param cert certificate to check
-     * @return true is this certificate is signed by one of trusted 
+     * @return true if a configured signer directly verifies the certificate signature
      */
     boolean isTrusted(X509Certificate cert);
     /**

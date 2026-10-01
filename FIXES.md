@@ -96,6 +96,8 @@ Publish only the reusable `easycrypt` and `easycrypt-identity` libraries for pub
 
 ## Phase 6: Complete certificate validation contracts
 
+**Status:** Implemented. Certificate validity now explicitly checks only the inclusive date range; direct signer checks also require issuer/subject name agreement and signature verification. Private/public key matching uses sign/verify challenges, and validator documentation states it does not perform full PKIX checks.
+
 - Document what `ExtCert.isValid` verifies and distinguish validity dates from trust-chain, signature, key-usage, and revocation checks.
 - Implement only the checks the API promises; make unsupported checks explicit rather than implying full certificate validation.
 - Review private-key/certificate matching and certificate-chain validation entry points for consistent error reporting.

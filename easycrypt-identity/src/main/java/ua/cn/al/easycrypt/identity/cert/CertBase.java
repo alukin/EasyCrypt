@@ -18,11 +18,10 @@ package ua.cn.al.easycrypt.identity.cert;
 
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import ua.cn.al.easycrypt.AsymCryptor;
-import ua.cn.al.easycrypt.AsymKeysHolder;
+import java.security.GeneralSecurityException;
+import java.security.Signature;
 import ua.cn.al.easycrypt.CryptoConfig;
 import ua.cn.al.easycrypt.CryptoFactory;
-import ua.cn.al.easycrypt.CryptoNotValidException;
 import ua.cn.al.easycrypt.CryptoParams;
 
 /**
@@ -38,24 +37,47 @@ public class CertBase {
     protected CryptoParams params = CryptoConfig.createDefaultParams();
     protected CryptoFactory factory = CryptoFactory.newInstance(params);
     
+    /**
+     * Checks that the supplied private key corresponds to this object's public
+     * key by signing and verifying a fresh challenge. Returns false for null,
+     * incompatible, or unsupported keys.
+     */
     public boolean checkKeys(PrivateKey pvtk) {
-        boolean res = false;
-        try {
-            String test = "Lazy Fox jumps ofver snoopy dog";
-            AsymCryptor ac = factory.getAsymCryptor();
-            AsymKeysHolder kn = new AsymKeysHolder(pubKey, pvtk, pubKey);
-            ac.setKeys(kn);
-            byte[] enc = ac.encrypt(test.getBytes());
-            byte[] dec = ac.decrypt(enc);
-            String test_res = new String(dec);
-            res = test.compareTo(test_res) == 0;
-        } catch (CryptoNotValidException ex) {
+        if (pvtk == null || pubKey == null || !keyFamily(pvtk.getAlgorithm()).equals(keyFamily(pubKey.getAlgorithm()))) {
+            return false;
         }
-        return res;
+        try {
+            String keyAlgorithm = pubKey.getAlgorithm();
+            String signatureAlgorithm = switch (keyAlgorithm.toUpperCase(java.util.Locale.ROOT)) {
+                case "RSA" -> "SHA256withRSA";
+                case "EC", "ECDSA" -> "SHA256withECDSA";
+                case "ED25519" -> "Ed25519";
+                default -> null;
+            };
+            if (signatureAlgorithm == null) {
+                return false;
+            }
+            byte[] challenge = new byte[32];
+            new java.security.SecureRandom().nextBytes(challenge);
+            Signature signature = Signature.getInstance(signatureAlgorithm);
+            signature.initSign(pvtk);
+            signature.update(challenge);
+            byte[] signedChallenge = signature.sign();
+            signature.initVerify(pubKey);
+            signature.update(challenge);
+            return signature.verify(signedChallenge);
+        } catch (GeneralSecurityException ex) {
+            return false;
+        }
     }
 
     public PublicKey getPublicKey() {
         return pubKey;
+    }
+
+    private static String keyFamily(String algorithm) {
+        String normalized = algorithm.toUpperCase(java.util.Locale.ROOT);
+        return "ECDSA".equals(normalized) ? "EC" : normalized;
     }
 
 }

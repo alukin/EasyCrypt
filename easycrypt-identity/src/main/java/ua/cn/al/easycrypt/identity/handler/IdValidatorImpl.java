@@ -38,12 +38,18 @@ public class IdValidatorImpl implements IdValidator {
 
     @Override
     public boolean isSelfSigned(X509Certificate cert) {
+        if (cert == null) {
+            return false;
+        }
         ExtCert ecert = new ExtCert(cert);
         return ecert.isSelfSigned();
     }
 
     @Override
     public boolean isTrusted(X509Certificate cert) {
+        if (cert == null) {
+            return false;
+        }
         boolean res = false;
         ExtCert ac = new ExtCert(cert);
         for (X509Certificate signerCert : trustedSigners) {
@@ -57,7 +63,9 @@ public class IdValidatorImpl implements IdValidator {
 
     @Override
     public void addTrustedSignerCert(X509Certificate cert) {
-        trustedSigners.add(cert);
+        if (cert != null) {
+            trustedSigners.add(cert);
+        }
     }
     
     @Override
