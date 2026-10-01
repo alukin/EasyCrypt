@@ -41,6 +41,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.BeforeAll;
@@ -151,11 +152,23 @@ public class NoFilesCryptoTest {
         }
         try{
             instance.setNonce(nounce);
-            fail("Nouce reuse not detected");
+            assertArrayEquals(iv, instance.getIV());
         }catch(Exception e){      
+            fail("Can not preserve explicitly assigned nonce before encryption");
         }
        byte[] k = instance.getIV();
        assertArrayEquals(iv, k);
+
+       try {
+           instance.setKey(new byte[32]);
+           instance.encrypt(new byte[] {1});
+           byte[] firstEncryptionNonce = instance.getNonce();
+           instance.encrypt(new byte[] {2});
+           assertFalse(Arrays.equals(firstEncryptionNonce, instance.getNonce()),
+                   "Each encryption must obtain a fresh random nonce");
+       } catch (CryptoNotValidException ex) {
+           fail("Encryption with generated nonces failed", ex);
+       }
     }
 
 
