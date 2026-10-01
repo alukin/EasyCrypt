@@ -4,23 +4,23 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ua.cn.al</groupId>
-    <artifactId>easycrypt-top</artifactId>
+    <artifactId>easycrypt-parent</artifactId>
 
     <version>1.4.0</version>
 
     <packaging>pom</packaging>
-    <name>EasyCrypt top</name>
-    <description>EasyCrypt cryptography libraries, examples and utilities</description>
+    <name>EasyCrypt Parent POM</name>
+    <description>Build parent for the EasyCrypt cryptography libraries.</description>
     
     <organization>
         <name>Oleksiy Lukin</name>
-        <url>http://al.cn.ua/</url>
+        <url>https://github.com/alukin/EasyCrypt</url>
     </organization>
 
     <licenses>
        <license>
            <name>Apache License Version 2.0, January 2004 </name>
-           <url>http://www.apache.org/licenses/</url>
+           <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
        </license>
    </licenses>
   
@@ -29,13 +29,13 @@
             <id>oleksiy.lukin</id>
             <name>Oleksiy Lukin</name>
             <email>alukin@gmail.com</email>
-            <organizationUrl>http://al.cn.ua</organizationUrl>
+            <organizationUrl>https://github.com/alukin</organizationUrl>
         </developer>
     </developers>  
     
     <scm>
-        <connection>scm:git:git@github.com:alukin/EasyCrypt.git</connection>
-        <developerConnection>scm:git:ssh://github.com:alukin/EasyCrypt.git</developerConnection>
+        <connection>scm:git:https://github.com/alukin/EasyCrypt.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/alukin/EasyCrypt.git</developerConnection>
         <url>https://github.com/alukin/EasyCrypt/tree/main</url>
     </scm>
     
@@ -51,9 +51,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
     
-        <java.version>11</java.version>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <java.version>21</java.version>
+        <maven.compiler.release>${java.version}</maven.compiler.release>
+        <lombok.version>1.18.48</lombok.version>
     </properties>
     
     <profiles>
@@ -74,6 +74,44 @@
             <properties>
                 <NativeBuildPhase>package</NativeBuildPhase>                
             </properties>
+        </profile>
+        <profile>
+            <id>central-release</id>
+            <properties>
+                <central.skipPublishing>true</central.skipPublishing>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>3.2.7</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.11.0</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>central</publishingServerId>
+                            <autoPublish>false</autoPublish>
+                            <skipPublishing>${central.skipPublishing}</skipPublishing>
+                            <excludeArtifact>easycryptutil</excludeArtifact>
+                            <excludeArtifact>easycrypt-examples</excludeArtifact>
+                            <excludeArtifact>easycrypt-identity-examples</excludeArtifact>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
     
@@ -129,7 +167,7 @@
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
-                <version>1.18.34</version>
+                <version>${lombok.version}</version>
                 <scope>provided</scope>
             </dependency>    
         </dependencies>
@@ -163,8 +201,7 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.11.0</version>
                     <configuration>
-                        <source>${maven.compiler.source}</source>
-                        <target>${maven.compiler.target}</target>
+                        <release>${maven.compiler.release}</release>
                         <showDeprecation>true</showDeprecation>
                     </configuration>
                 </plugin>

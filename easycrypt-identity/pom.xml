@@ -4,13 +4,21 @@
 
     <parent>
         <groupId>ua.cn.al</groupId>
-        <artifactId>easycrypt-top</artifactId>
+        <artifactId>easycrypt-parent</artifactId>
         <version>1.4.0</version>
     </parent>
 
-    <name>esycrypt-identity</name>  
+    <name>easycrypt-identity</name>
+    <description>X.509 identity and certificate helpers for EasyCrypt.</description>
+    <url>https://github.com/alukin/EasyCrypt/tree/main/easycrypt-identity</url>
     <artifactId>easycrypt-identity</artifactId>
     <packaging>jar</packaging>
+
+    <scm>
+        <connection>scm:git:https://github.com/alukin/EasyCrypt.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/alukin/EasyCrypt.git</developerConnection>
+        <url>https://github.com/alukin/EasyCrypt/tree/main/easycrypt-identity</url>
+    </scm>
     
     <dependencies>
         <dependency>
@@ -56,12 +64,29 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.2.0</version>
                 <configuration>
-                    <reportOutputDirectory>../../docs/java-api</reportOutputDirectory>
-                    <destDir>fbcrypto</destDir>
                     <doclint>none</doclint>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -80,7 +105,7 @@
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
-                            <version>1.18.34</version>
+                            <version>${lombok.version}</version>
                         </path>                         
                     </annotationProcessorPaths>
                 </configuration>
