@@ -74,6 +74,8 @@ Publish only the reusable `easycrypt` and `easycrypt-identity` libraries for pub
 
 ## Phase 4: Fix and clarify RSA encryption behavior
 
+**Status:** Implemented. Legacy PKCS#1 v1.5 encryption is deprecated and limited to one modulus-sized block. New `encryptHybrid`/`decryptHybrid` methods use a versioned AES-256-GCM envelope with RSA-OAEP-SHA256 key wrapping and authenticated header metadata.
+
 - Correct the API documentation to reflect the actual maximum plaintext size for the selected RSA key and padding.
 - Prefer hybrid encryption for arbitrary-size data: generate a random symmetric key, encrypt the payload with authenticated encryption, and wrap the key with RSA using an approved padding scheme such as OAEP.
 - If the existing raw RSA mode must remain for compatibility, impose a clear input-size limit and label the mode as legacy; do not claim that it chunks large messages.

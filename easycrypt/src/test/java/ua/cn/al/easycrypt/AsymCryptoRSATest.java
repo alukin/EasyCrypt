@@ -35,6 +35,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -149,6 +150,30 @@ public class AsymCryptoRSATest extends TestBase {
 
         
         assertArrayEquals(plain.array(), decrypted);
+    }
+
+    @Test
+    public void testHybridEncryptionHandlesLargePayloadAndDetectsTampering() throws Exception {
+        byte[] plain = new byte[128 * 1024];
+        new java.security.SecureRandom().nextBytes(plain);
+
+        AsymCryptorRSAImpl encryptor = new AsymCryptorRSAImpl(params);
+        encryptor.setKeys(khA);
+        byte[] envelope = encryptor.encryptHybrid(plain);
+
+        AsymCryptorRSAImpl decryptor = new AsymCryptorRSAImpl(params);
+        decryptor.setKeys(khB);
+        assertArrayEquals(plain, decryptor.decryptHybrid(envelope));
+
+        envelope[4]++;
+        assertThrows(CryptoNotValidException.class, () -> decryptor.decryptHybrid(envelope));
+    }
+
+    @Test
+    public void testLegacyRsaEncryptionRejectsOversizedPlaintext() throws Exception {
+        AsymCryptorRSAImpl encryptor = new AsymCryptorRSAImpl(params);
+        encryptor.setKeys(khA);
+        assertThrows(CryptoNotValidException.class, () -> encryptor.encrypt(new byte[502]));
     }
 
     

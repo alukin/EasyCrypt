@@ -16,6 +16,10 @@ For new data, use `GenericWallet.deriveKeyFromPassPhrase` with a unique random s
 
 `GenericWallet.keyFromPassPhrase` and `Digester.PBKDF2` remain available but are deprecated compatibility methods. They use EasyCrypt's historical 16-iteration setting and are only suitable for opening existing data.
 
+### RSA encryption
+
+For new RSA encryption, use `AsymCryptorRSAImpl.encryptHybrid` and `decryptHybrid`. The versioned envelope encrypts payloads with AES-256-GCM and wraps the random AES key with RSA-OAEP-SHA256; the envelope header is authenticated. Hybrid plaintext is limited to 64 MiB. The generic `encrypt` and `decrypt` methods remain for compatibility with legacy single-block RSAES-PKCS1-v1_5 data. Legacy encryption is deprecated, has no integrity protection, and accepts at most `ceil(modulusBits / 8) - 11` plaintext bytes.
+
 ### Notes on ECC curves support
 
 This citation from https://java.com/en/configure_crypto.html#DisableWeakNamedCurves :
