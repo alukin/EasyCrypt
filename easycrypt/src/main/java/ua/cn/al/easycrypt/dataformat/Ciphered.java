@@ -28,6 +28,7 @@
 
 package ua.cn.al.easycrypt.dataformat;
 
+import ua.cn.al.easycrypt.CryptoNotValidException;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -60,8 +61,8 @@ public class Ciphered {
      * @param en 8 bytes of explicit part of IV
      */
     public void setExplicitNonce(byte[] en){
-        if(en.length!=8){
-            throw new IllegalArgumentException("Nounce size must be exactly 8 bytes");
+        if(en == null || en.length != 8){
+            throw new IllegalArgumentException("Nonce size must be exactly 8 bytes");
         }
         Arrays.fill(iv, (byte)0);
         System.arraycopy(en, 0, iv, 4, 8);       
@@ -73,17 +74,23 @@ public class Ciphered {
     }
 
     public byte[] getIV(){
-        return iv;
+        return Arrays.copyOf(iv, iv.length);
     }
     
     public void setIV(byte[] ivv){
-       if(ivv.length != 12){
-            throw new IllegalArgumentException("Nonce size must be exactly 8 bytes");
+       if(ivv == null || ivv.length != iv.length){
+            throw new IllegalArgumentException("IV size must be exactly " + iv.length + " bytes");
         }
        System.arraycopy(ivv, 0, iv, 0, 12);
     }
 
-    public static Ciphered fromBytes(byte[] message){
+    public static Ciphered fromBytes(byte[] message) throws CryptoNotValidException {
+        if (message == null || message.length < 12 + 16) {
+            throw new CryptoNotValidException("Truncated legacy AES-GCM message");
+        }
+        if (message.length - 12 > MAX_MSG_SIZE) {
+            throw new CryptoNotValidException("Legacy encrypted payload is too large");
+        }
         Ciphered res = new Ciphered();
         ByteBuffer bb = ByteBuffer.wrap(message);
         bb.get(res.iv);
@@ -93,6 +100,9 @@ public class Ciphered {
     }
     
     public byte[] toBytes(){
+        if (encrypted == null || encrypted.length < 16 || encrypted.length > MAX_MSG_SIZE) {
+            throw new IllegalArgumentException("Legacy encrypted payload is missing, too short, or too large");
+        }
         int capacity = iv.length+encrypted.length;
         ByteBuffer bb = ByteBuffer.allocate(capacity);
         bb.put(iv);

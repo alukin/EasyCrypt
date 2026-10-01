@@ -62,6 +62,8 @@ Publish only the reusable `easycrypt` and `easycrypt-identity` libraries for pub
 
 ## Phase 3: Harden AEAD message parsing
 
+**Status:** Implemented. AEAD and legacy AES-GCM parsers validate headers, signed lengths, overflow-safe payload bounds, exact input consumption, payload limits, and minimum tag length; malformed data raises `CryptoNotValidException` before allocation.
+
 - Check the minimum message length before reading the IV or length fields.
 - Reject negative lengths, integer overflow, declared sizes beyond the configured maximum, and any mismatch between declared lengths and remaining bytes.
 - Validate minimum ciphertext length for the configured authentication tag before attempting decryption.
