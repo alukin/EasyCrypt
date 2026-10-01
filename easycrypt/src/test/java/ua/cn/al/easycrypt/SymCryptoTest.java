@@ -25,6 +25,7 @@ import java.nio.ByteBuffer;
 import java.security.SecureRandom;
 import org.junit.jupiter.api.AfterAll;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.BeforeAll;
@@ -163,6 +164,26 @@ public class SymCryptoTest extends TestBase {
         } catch (CryptoNotValidException ex) {
             fail("Can not encrypt:" + ex.getMessage());
         }
+    }
+
+    @Test
+    public void testFreshNonceAndRepeatedDecryption() throws Exception {
+        byte[] key = new byte[32];
+        byte[] salt = new byte[4];
+        srand.nextBytes(key);
+        srand.nextBytes(salt);
+
+        SymCryptor cryptor = new SymJCEImpl(params);
+        cryptor.setKey(key);
+        cryptor.setSalt(salt);
+        byte[] first = cryptor.encrypt("first".getBytes());
+        byte[] firstNonce = cryptor.getNonce();
+        byte[] second = cryptor.encrypt("second".getBytes());
+        assertNotEquals(java.util.Arrays.toString(firstNonce), java.util.Arrays.toString(cryptor.getNonce()));
+
+        assertArrayEquals("first".getBytes(), cryptor.decrypt(first));
+        assertArrayEquals("first".getBytes(), cryptor.decrypt(first));
+        assertArrayEquals("second".getBytes(), cryptor.decrypt(second));
     }
 
 }

@@ -59,7 +59,7 @@ public class SymJCEImpl implements SymCryptor {
      */
     @Override
     public void setKey(byte[] key) throws CryptoNotValidException {
-        if (!((key.length == 128 / 8) || (key.length == 256 / 8))) {
+        if (key == null || !((key.length == 128 / 8) || (key.length == 256 / 8))) {
             throw new IllegalArgumentException("Key length must be exactly 16 or 32 or bytes long");
         }
         symmetricKey = new SecretKeySpec(key, "AES");
@@ -67,16 +67,23 @@ public class SymJCEImpl implements SymCryptor {
 
     @Override
     public void setIV(byte[] iv) {
+        if (iv == null || iv.length != gcmIV.length) {
+            throw new IllegalArgumentException("IV must be exactly " + gcmIV.length + " bytes");
+        }
+        Arrays.fill(gcmIV, (byte) 0);
         ByteBuffer.wrap(gcmIV).put(iv, 0, gcmIV.length);
     }
 
     @Override
     public byte[] getIV() {
-        return gcmIV;
+        return Arrays.copyOf(gcmIV, gcmIV.length);
     }
 
     @Override
     public void setSalt(byte[] salt) {
+        if (salt == null || salt.length != params.getAesGcmSaltLen()) {
+            throw new IllegalArgumentException("Salt must be exactly " + params.getAesGcmSaltLen() + " bytes");
+        }
         ByteBuffer.wrap(gcmIV).put(salt, 0, params.getAesGcmSaltLen());
     }
 
@@ -87,28 +94,32 @@ public class SymJCEImpl implements SymCryptor {
 
     @Override
     public void setNonce(byte[] explicitNonce) throws CryptoNotValidException {
-        if (Arrays.equals(getNonce(), explicitNonce)) {
-            throw new IllegalArgumentException("Nonce reuse detected!");
-        }
-        byte[] en;
         if (explicitNonce == null) {
-            en = new byte[params.getAesGcmNonceLen()];
-            random.nextBytes(en);
-        } else {
-            en = explicitNonce;
+            generateNonce();
+            return;
         }
-        ByteBuffer.wrap(gcmIV).position(params.getAesGcmSaltLen()).put(en, 0, params.getAesGcmNonceLen());
+        if (explicitNonce.length != params.getAesGcmNonceLen()) {
+            throw new IllegalArgumentException("Nonce must be exactly " + params.getAesGcmNonceLen() + " bytes");
+        }
+        ByteBuffer.wrap(gcmIV).position(params.getAesGcmSaltLen()).put(explicitNonce);
+    }
+
+    private void generateNonce() {
+        byte[] nonce = new byte[params.getAesGcmNonceLen()];
+        random.nextBytes(nonce);
+        ByteBuffer.wrap(gcmIV).position(params.getAesGcmSaltLen()).put(nonce);
     }
 
     @Override
     public byte[] getNonce() {
-        return Arrays.copyOfRange(gcmIV, params.getAesGcmSaltLen(), gcmIV.length);
+        return Arrays.copyOfRange(gcmIV, params.getAesGcmSaltLen(), params.getAesGcmSaltLen() + params.getAesGcmNonceLen());
     }
 
     @Override
     public byte[] encrypt(byte[] plain) throws CryptoNotValidException {
         //TODO: avoid data copy, use ByteBuffer somehow
         try {
+            generateNonce();
             Cipher blockCipherSym = getCipher(Cipher.ENCRYPT_MODE);
             byte[] encrypted = new byte[blockCipherSym.getOutputSize(plain.length)];
             int updateSize = blockCipherSym.update(plain, 0, plain.length, encrypted);
@@ -155,6 +166,7 @@ public class SymJCEImpl implements SymCryptor {
     @Override
     public AEADCiphered encryptWithAEAData(byte[] plain, byte[] aeadata) throws CryptoNotValidException {
         try {
+            generateNonce();
             AEADCiphered msg = new AEADCiphered(params);
             Cipher blockCipherSym = getCipher(Cipher.ENCRYPT_MODE);
             if (aeadata != null) {
@@ -207,13 +219,16 @@ public class SymJCEImpl implements SymCryptor {
     }
 
     @Override
-    public Cipher getCipher(int mode) throws NoSuchAlgorithmException, NoSuchPaddingException {
+    public Cipher getCipher(int mode) throws NoSuchAlgorithmException, NoSuchPaddingException, CryptoNotValidException {
+        if (symmetricKey == null) {
+            throw new CryptoNotValidException("AES key has not been set");
+        }
         Cipher blockCipherSym = Cipher.getInstance(params.getSymCipher());
         GCMParameterSpec gcmParameterSpecSym = new GCMParameterSpec(params.getGcmAuthTagLenBits(), gcmIV);
         try {
             blockCipherSym.init(mode, symmetricKey, gcmParameterSpecSym);
         } catch (InvalidKeyException | InvalidAlgorithmParameterException ex) {
-            log.error("Can not create cipher", ex);
+            throw new CryptoNotValidException("Can not initialize AES-GCM cipher", ex);
         }
         return blockCipherSym;
     }

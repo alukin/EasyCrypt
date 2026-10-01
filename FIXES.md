@@ -50,6 +50,8 @@ Publish only the reusable `easycrypt` and `easycrypt-identity` libraries for pub
 
 ## Phase 2: Make AES-GCM nonce handling safe and predictable
 
+**Status:** Implemented. Symmetric encryption generates a fresh random nonce per operation, decryption loads the message nonce without treating repeated decryptions as reuse, IV accessors copy state, input lengths are validated, and cipher initialization failures are propagated.
+
 - Separate nonce assignment for encryption from loading a nonce for decryption. Decryption must accept the nonce carried by the message, including repeated decryptions.
 - Ensure encryption obtains a fresh nonce for every operation, or clearly require and validate caller-provided unique nonces. Do not present a comparison with only the current nonce as reuse protection.
 - Define whether the salt is part of the transmitted IV or supplied out of band, and make the message format and API follow one consistent rule.

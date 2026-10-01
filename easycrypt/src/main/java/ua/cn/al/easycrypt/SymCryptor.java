@@ -109,5 +109,5 @@ public interface SymCryptor extends Cryptor {
      * @param mode is Chipher.ENCRIPT_MODE or Chipher.DECRYPT_MODE
      * @return ready to use cipher
      */
-    public Cipher getCipher(int mode)throws NoSuchAlgorithmException, NoSuchPaddingException;
+    public Cipher getCipher(int mode)throws NoSuchAlgorithmException, NoSuchPaddingException, CryptoNotValidException;
 }
