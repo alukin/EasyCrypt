@@ -32,6 +32,7 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import javax.crypto.SecretKey;
@@ -55,60 +56,78 @@ public class PKCS12KeyStore {
     private static final Logger log = LoggerFactory.getLogger(PKCS12KeyStore.class);
 
     public boolean openKeyStore(String path, String password) {
-        boolean res = true;
-        try ( InputStream is = new FileInputStream(new File(path))){
-            keystore = KeyStore.getInstance(KEYSTORE_TYPE, CryptoConfig.getProvider());
-            keystore.load(is, password.toCharArray());
-            Enumeration<String> enumeration = keystore.aliases();
+        aliases.clear();
+        certificates.clear();
+        keystore = null;
+        if (path == null) {
+            return false;
+        }
+        try (InputStream is = new FileInputStream(new File(path))) {
+            KeyStore loaded = KeyStore.getInstance(KEYSTORE_TYPE, CryptoConfig.getProvider());
+            loaded.load(is, passwordChars(password));
+            List<String> loadedAliases = new ArrayList<>();
+            List<Certificate> loadedCertificates = new ArrayList<>();
+            Enumeration<String> enumeration = loaded.aliases();
             while (enumeration.hasMoreElements()) {
                 String alias = enumeration.nextElement();
-                aliases.add(alias);
-                Certificate certificate = keystore.getCertificate(alias);
-                certificates.add(certificate);
+                loadedAliases.add(alias);
+                Certificate certificate = loaded.getCertificate(alias);
+                if (certificate != null) {
+                    loadedCertificates.add(certificate);
+                }
             }
+            keystore = loaded;
+            aliases.addAll(loadedAliases);
+            certificates.addAll(loadedCertificates);
         } catch (FileNotFoundException ex) {
             log.error("File" + path + " does not exists", ex);
-            res = false;
         } catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException ex) {
             log.error("File" + path + " is not loadable", ex);
-            res = false;
+            return false;
         }
-        
-        return res;
+        return keystore != null;
     }
 
     public boolean createOrOpenKeyStore(String path, String password) {
-        boolean res = true;
+        if (path == null) {
+            return false;
+        }
+        File file = new File(path);
+        if (file.exists()) {
+            return openKeyStore(path, password);
+        }
+        aliases.clear();
+        certificates.clear();
+        keystore = null;
         try {
-            File file = new File(path);
-            keystore = KeyStore.getInstance(KEYSTORE_TYPE,CryptoConfig.getProvider());
-            if (file.exists()) {
-                // if exists, load
-                res = openKeyStore(path, password);
-            } else {
-                // if not exists, create
-                keystore.load(null, null);
-                keystore.store(new FileOutputStream(file), password.toCharArray());
+            KeyStore created = KeyStore.getInstance(KEYSTORE_TYPE, CryptoConfig.getProvider());
+            created.load(null, passwordChars(password));
+            try (FileOutputStream fos = new FileOutputStream(file)) {
+                created.store(fos, passwordChars(password));
             }
+            keystore = created;
         } catch (KeyStoreException | IOException | NoSuchAlgorithmException | CertificateException ex) {
             log.error("Can not create file" + path, ex);
-            res = false;
+            return false;
         }
-        return res;
+        return true;
     }
 
     public List<String> getAliases() {
-        return aliases;
+        return Collections.unmodifiableList(new ArrayList<>(aliases));
     }
 
     public List<Certificate> getCertificates() {
-        return certificates;
+        return Collections.unmodifiableList(new ArrayList<>(certificates));
     }
     
     public Key getKey(String alias, String password){
         Key key = null;
+        if (keystore == null || alias == null) {
+            return null;
+        }
         try {
-            key = keystore.getKey(alias, password.toCharArray());
+            key = keystore.getKey(alias, passwordChars(password));
         } catch (KeyStoreException | NoSuchAlgorithmException | UnrecoverableKeyException ex) {
             log.error("Can not read key with alias:" + alias, ex);
         }
@@ -125,57 +144,66 @@ public class PKCS12KeyStore {
     }
     
     public boolean addSymmetricKey(byte[] key, String algo, String alias, String password){
-        boolean res = true;
+        if (keystore == null || key == null || algo == null || alias == null) {
+            return false;
+        }
         try {
             SecretKey secretKey = new SecretKeySpec(key,algo);
             KeyStore.SecretKeyEntry secret = new KeyStore.SecretKeyEntry(secretKey);
-            KeyStore.ProtectionParameter pwd  = new KeyStore.PasswordProtection(password.toCharArray());
+            KeyStore.ProtectionParameter pwd  = new KeyStore.PasswordProtection(passwordChars(password));
             keystore.setEntry(alias, secret, pwd);
-            return res;
+            return true;
         } catch (KeyStoreException ex) {
            log.error("Can not set key entry with alias: "+alias,ex);
-           res=false;
+           return false;
         }
-        return res;
     }
     
     public boolean addCertificate(String alias, X509Certificate cert){
-        boolean res = true;
+        if (keystore == null || alias == null || cert == null) {
+            return false;
+        }
         try {
             keystore.setCertificateEntry(alias, cert);
         } catch (KeyStoreException ex) {
            log.error("Can not set certificate entry with alias: "+alias,ex);
-           res=false;
+           return false;
         }
-        return res;       
+        return true;
     }
     
     public boolean addPrivateKey(PrivateKey pvtKey, String alias, String password, X509Certificate cert, X509Certificate caCert){
-        boolean res = true;
-        if(password==null){
-            password="";
+        if (keystore == null || pvtKey == null || alias == null || cert == null || caCert == null) {
+            return false;
         }
         try {
             X509Certificate[] chain = new X509Certificate[2];
             chain[0] = cert;
             chain[1] = caCert;
-            keystore.setKeyEntry(alias, pvtKey, password.toCharArray(), chain);       
-            return res;
+            keystore.setKeyEntry(alias, pvtKey, passwordChars(password), chain);
+            return true;
         } catch (KeyStoreException ex) {
             log.error("Can not set private key entry with alias: "+alias,ex);
-            res=false;
+            return false;
         }
-        return res;
     }
 
     public boolean save(String path, String password){
-        boolean res = false;
+        if (keystore == null || path == null) {
+            return false;
+        }
         File file = new File(path);
         try(FileOutputStream fos = new FileOutputStream(file)) {
-            keystore.store(fos, password.toCharArray());
+            keystore.store(fos, passwordChars(password));
+            return true;
         } catch ( KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException ex) {
              log.error("Can not dave keystore to file:" + file.getAbsolutePath(), ex);
+             return false;
         }
-        return res;
+    }
+
+    /** Null passwords are treated as empty passwords consistently by this wrapper. */
+    private static char[] passwordChars(String password) {
+        return password == null ? new char[0] : password.toCharArray();
     }
 }

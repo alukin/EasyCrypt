@@ -81,9 +81,9 @@ public class PKCS12Test {
             X509Certificate cert = certOps.createSelfSignedX509v3(kp, cd);
             KeyWriter kw = new KeyWriterImpl();
             PKCS12KeyStore ks = new PKCS12KeyStore();
-            ks.createOrOpenKeyStore(pathToKeyStore, ksPassword);
+            assertTrue(ks.createOrOpenKeyStore(pathToKeyStore, ksPassword));
             ks.addPrivateKey(kp.getPrivate(), ksAlias, pvtKeyPassword, cert, cert);
-            ks.save(pathToKeyStore,ksPassword);
+            assertTrue(ks.save(pathToKeyStore,ksPassword));
         } catch (CryptoNotValidException | IOException ex) {
             fail(ex.toString());
         }
@@ -104,6 +104,25 @@ public class PKCS12Test {
         boolean expResult = true;
         boolean result = instance.openKeyStore(pathToKeyStore, ksPassword);
         assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testRepeatedOpenReplacesEntriesAndFailuresClearState() {
+        PKCS12KeyStore instance = new PKCS12KeyStore();
+        assertTrue(instance.openKeyStore(pathToKeyStore, ksPassword));
+        int aliasCount = instance.getAliases().size();
+        assertTrue(instance.openKeyStore(pathToKeyStore, ksPassword));
+        assertEquals(aliasCount, instance.getAliases().size());
+        assertFalse(instance.openKeyStore("missing-keystore.p12", ksPassword));
+        assertTrue(instance.getAliases().isEmpty());
+        assertNull(instance.getPrivateKey(ksAlias, pvtKeyPassword));
+    }
+
+    @Test
+    public void testSaveFailureReturnsFalse() {
+        PKCS12KeyStore instance = new PKCS12KeyStore();
+        assertTrue(instance.openKeyStore(pathToKeyStore, ksPassword));
+        assertFalse(instance.save("target", ksPassword));
     }
 
 

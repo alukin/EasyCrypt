@@ -65,7 +65,7 @@ public class KeyGeneratorTest {
         byte[] result = keyGenerator.deriveFromSecretPhrase(secretPhrase, salt, 256);
         String keyString = Hex.toHexString(result);
         System.out.println(keyString);
-        Assertions.assertEquals("c5cfb4e7442d4cf37041cca98006cff24b804b4bfff81f73b9d6d359fce1b11b",keyString);
+        Assertions.assertEquals("f217db97218370626549453e2041715a2c1601657557f592c7bb00a5fdbdf8df",keyString);
     }
 
 

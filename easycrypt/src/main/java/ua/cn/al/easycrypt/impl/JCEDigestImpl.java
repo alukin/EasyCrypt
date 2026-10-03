@@ -114,22 +114,52 @@ public class JCEDigestImpl implements Digester {
     }
 
     @Override
+    @Deprecated
     public byte[] PBKDF2(String passPhrase, byte[] salt) throws CryptoNotValidException {
-        if (salt == null) {
-            throw new CryptoNotValidException("Salt can not be null, length is 12 bytes for PBKDF2");
-        }
-        try {
-            SecretKeyFactory skf = SecretKeyFactory.getInstance(CryptoParams.PBKDF2_KEY_DERIVATION_FN);
-            PBEKeySpec spec = new PBEKeySpec(passPhrase.toCharArray(), salt, CryptoParams.PBKDF2_ITERATIONS, CryptoParams.PBKDF2_KEYELEN);
-            SecretKey key = skf.generateSecret(spec);
+        return derive(passPhrase, salt, CryptoParams.PBKDF2_LEGACY_ITERATIONS, CryptoParams.PBKDF2_KEYELEN,
+                false, CryptoParams.PBKDF2_KEY_DERIVATION_FN);
+    }
 
-            byte[] res = key.getEncoded();
-            return res;
-        } catch (NoSuchAlgorithmException ex) {
-            //ignore, we use constants
-        } catch (InvalidKeySpecException ex) {
-            throw new CryptoNotValidException("Possibly invalid salt length for PBKDF2");
+    @Override
+    public byte[] deriveKeyFromPassPhrase(String passPhrase, byte[] salt) throws CryptoNotValidException {
+        return deriveKeyFromPassPhrase(passPhrase, salt, params.getPbkdf2Iterations());
+    }
+
+    @Override
+    public byte[] deriveKeyFromPassPhrase(String passPhrase, byte[] salt, int iterations) throws CryptoNotValidException {
+        return derive(passPhrase, salt, iterations, CryptoParams.PBKDF2_KEYELEN, true, params.getKeyDerivationFn());
+    }
+
+    private byte[] derive(String passPhrase, byte[] salt, int iterations, int keyLengthBits, boolean secureDefaults,
+            String algorithm)
+            throws CryptoNotValidException {
+        if (passPhrase == null || passPhrase.isEmpty()) {
+            throw new CryptoNotValidException("Passphrase must not be null or empty");
         }
-        return null;
+        if (salt == null || (secureDefaults && salt.length < CryptoParams.PBKDF2_SALT_LEN_BYTES)) {
+            throw new CryptoNotValidException("PBKDF2 salt must be at least "
+                    + CryptoParams.PBKDF2_SALT_LEN_BYTES + " bytes");
+        }
+        if (iterations <= 0 || (secureDefaults && iterations < CryptoParams.PBKDF2_ITERATIONS)) {
+            throw new CryptoNotValidException("PBKDF2 iteration count must be at least "
+                    + CryptoParams.PBKDF2_ITERATIONS);
+        }
+        char[] password = passPhrase.toCharArray();
+        PBEKeySpec spec = null;
+        try {
+            SecretKeyFactory skf = SecretKeyFactory.getInstance(algorithm);
+            spec = new PBEKeySpec(password, salt, iterations, keyLengthBits);
+            SecretKey key = skf.generateSecret(spec);
+            return key.getEncoded();
+        } catch (NoSuchAlgorithmException ex) {
+            throw new CryptoNotValidException("PBKDF2 algorithm is unavailable: " + algorithm, ex);
+        } catch (InvalidKeySpecException ex) {
+            throw new CryptoNotValidException("Invalid parameters for PBKDF2", ex);
+        } finally {
+            if (spec != null) {
+                spec.clearPassword();
+            }
+            java.util.Arrays.fill(password, '\0');
+        }
     }
 }

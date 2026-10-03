@@ -208,25 +208,23 @@ public class CryptoFactory {
         SymCryptor sc = getSymCryptor();
         sc.setIV(IV);
         sc.setKey(key);
-        Cipher c=null;
         try {
-            c = sc.getCipher(Cipher.ENCRYPT_MODE);
+            Cipher c = sc.getCipher(Cipher.ENCRYPT_MODE);
+            return new CipherOutputStream(sink, c);
         } catch (NoSuchAlgorithmException | NoSuchPaddingException ex) {
-           log.error("Can not create cipher", ex);
+           throw new CryptoNotValidException("Can not create cipher", ex);
         }
-        return new CipherOutputStream(sink, c);
     }
 
     public CipherInputStream getCipherInputStream(InputStream source ,byte[] IV, byte[] key ) throws CryptoNotValidException {
         SymCryptor sc = getSymCryptor();
         sc.setIV(IV);
         sc.setKey(key);
-        Cipher c=null;
         try {
-            c = sc.getCipher(Cipher.DECRYPT_MODE);
+            Cipher c = sc.getCipher(Cipher.DECRYPT_MODE);
+            return new CipherInputStream(source, c);
         } catch (NoSuchAlgorithmException | NoSuchPaddingException ex) {
-           log.error("Can not create cipher", ex);
+           throw new CryptoNotValidException("Can not create cipher", ex);
         }
-        return new CipherInputStream(source,c);
     }
 }

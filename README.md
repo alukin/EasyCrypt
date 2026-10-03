@@ -48,7 +48,8 @@ and identity library with examples. Fore the security reason, the minimal Java v
 
 ### How do I get set up? ###
 
-* Java requirements: JDK 11 or up to 16 for pure Java usage. GraalVM 21.0.0 or later for native image builds.
+* Java requirement: JDK 21 or later for building and running this release.
+* The `easycrypt` and `easycrypt-identity` library artifacts are intended for Maven Central publication. The CLI and example modules are not published.
 
 ### Experimental stuff
 

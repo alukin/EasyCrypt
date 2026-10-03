@@ -144,19 +144,18 @@ public class ExtCert extends CertBase {
         return res;
     }
 
+    /**
+     * Returns whether {@code date} is within this certificate's validity period,
+     * including the not-before and not-after instants. This checks dates only;
+     * it does not validate signatures, trust chains, key usage, or revocation.
+     */
     public boolean isValid(Date date) {
-        boolean dateOK = false;
+        if (date == null) {
+            return false;
+        }
         Date start = certificate.getNotBefore();
         Date end = certificate.getNotAfter();
-        if (date != null && start != null && end != null) {
-            if (date.after(start) && date.before(end)) {
-                dateOK = true;
-            } else {
-                dateOK = false;
-            }
-        }
-        //TODO: implement more checks
-        return dateOK;
+        return !date.before(start) && !date.after(end);
     }
 
     public BigInteger getSerial() {
@@ -171,7 +170,16 @@ public class ExtCert extends CertBase {
         return cert_attr;
     }
     
+    /**
+     * Checks that the supplied certificate has the subject name named as this
+     * certificate's issuer and that its public key verifies this certificate's
+     * signature. This is a direct-issuer check, not full PKIX path validation.
+     */
     public boolean verify(X509Certificate certificate) {
+        if (certificate == null || !this.certificate.getIssuerX500Principal()
+                .equals(certificate.getSubjectX500Principal())) {
+            return false;
+        }
         try {
             this.certificate.verify(certificate.getPublicKey());
         } catch (CertificateException | NoSuchAlgorithmException | InvalidKeyException | NoSuchProviderException | SignatureException e) {
@@ -180,10 +188,12 @@ public class ExtCert extends CertBase {
         return true;
     }
     
+    /** Checks issuer/subject name equality and the certificate's self-signature. */
     public boolean isSelfSigned(){
         return isSignedBy(certificate);
     }
 
+    /** Checks whether this certificate is directly signed by the named issuer certificate. */
     public boolean isSignedBy(X509Certificate signerCert) {
         return verify(signerCert);
     }

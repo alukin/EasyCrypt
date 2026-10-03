@@ -22,7 +22,7 @@ package ua.cn.al.easycrypt.identity.cert;
 public class CertException extends RuntimeException {
 
     CertException(String message) {
-        throw new RuntimeException(message);
+        super(message);
     }
 
 }

@@ -17,6 +17,7 @@
 package ua.cn.al.easycrypt.dataformat;
 
 import ua.cn.al.easycrypt.CryptoParams;
+import ua.cn.al.easycrypt.CryptoNotValidException;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -58,42 +59,61 @@ public class AEADCiphered {
      * @param en 8 bytes of explicit part of IV
      */
     public void setExplicitNonce(byte[] en){
-        if(en.length!=8){
-            throw new IllegalArgumentException("Nounce size must be exactly 8 bytes");
+        if(en == null || en.length != cryptoParams.getAesGcmNonceLen()){
+            throw new IllegalArgumentException("Nonce size must be exactly " + cryptoParams.getAesGcmNonceLen() + " bytes");
         }
         Arrays.fill(iv, (byte)0);
-        System.arraycopy(en, 0, iv, 4, 8);       
+        System.arraycopy(en, 0, iv, cryptoParams.getAesGcmSaltLen(), en.length);
     }
 
     
     public byte[] getExplicitNonce(){
-        return Arrays.copyOfRange(iv, 4, 12);
+        return Arrays.copyOfRange(iv, cryptoParams.getAesGcmSaltLen(), iv.length);
     }
 
     public byte[] getIV(){
-        return iv;
+        return Arrays.copyOf(iv, iv.length);
     }
     
     public void setIV(byte[] ivv){
-       if(ivv.length != cryptoParams.getAesIvLen()){
-            throw new IllegalArgumentException("Nonce size must be exactly 8 bytes");
+       if(ivv == null || ivv.length != cryptoParams.getAesIvLen()){
+            throw new IllegalArgumentException("IV size must be exactly " + cryptoParams.getAesIvLen() + " bytes");
         }
        System.arraycopy(ivv, 0, iv, 0, cryptoParams.getAesIvLen());
     }
     
     public byte[] getHMAC(){
-      return Arrays.copyOfRange(encrypted, encrypted.length - hmacSize -1,encrypted.length-1);
+      if (encrypted == null || encrypted.length < hmacSize) {
+          throw new IllegalStateException("Encrypted payload does not contain a complete authentication tag");
+      }
+      return Arrays.copyOfRange(encrypted, encrypted.length - hmacSize, encrypted.length);
     }
     
-    public static AEADCiphered fromBytes(byte[] message, CryptoParams cryptoParams){
+    public static AEADCiphered fromBytes(byte[] message, CryptoParams cryptoParams) throws CryptoNotValidException {
+        if (message == null || cryptoParams == null) {
+            throw new CryptoNotValidException("Message and crypto parameters must not be null");
+        }
+        int headerSize = cryptoParams.getAesIvLen() + 2 * Integer.BYTES;
+        if (message.length < headerSize) {
+            throw new CryptoNotValidException("Truncated AEAD message header");
+        }
         AEADCiphered res = new AEADCiphered(cryptoParams);
         ByteBuffer bb = ByteBuffer.wrap(message);
         bb.get(res.iv);
         int txtlen = bb.getInt();
         int enclen = bb.getInt();
-        //prevent overflow attack
-        if(txtlen+enclen > MAX_MSG_SIZE){
-            throw new IllegalArgumentException("Declared message size is too big: " + (txtlen + enclen));
+        long payloadSize = (long) txtlen + enclen;
+        if (txtlen < 0 || enclen < 0) {
+            throw new CryptoNotValidException("AEAD message lengths must not be negative");
+        }
+        if (payloadSize > MAX_MSG_SIZE) {
+            throw new CryptoNotValidException("Declared AEAD payload is too large: " + payloadSize);
+        }
+        if (payloadSize != bb.remaining()) {
+            throw new CryptoNotValidException("AEAD message lengths do not match the remaining input");
+        }
+        if (enclen < res.hmacSize) {
+            throw new CryptoNotValidException("Encrypted AEAD payload is shorter than the authentication tag");
         }
         res.aatext = new byte[txtlen];
         res.encrypted = new byte[enclen];
@@ -103,6 +123,12 @@ public class AEADCiphered {
     }
     
     public byte[] toBytes(){
+        if (encrypted == null || aatext == null) {
+            throw new IllegalStateException("AEAD plaintext and encrypted payload must be set before serialization");
+        }
+        if ((long) aatext.length + encrypted.length > MAX_MSG_SIZE || encrypted.length < hmacSize) {
+            throw new IllegalArgumentException("AEAD payload is too large or shorter than its authentication tag");
+        }
         int capacity = calcBytesSize();
         ByteBuffer bb = ByteBuffer.allocate(capacity);
         bb.put(iv);

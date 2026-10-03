@@ -25,6 +25,8 @@ import java.util.List;
 import org.bouncycastle.util.encoders.Hex;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author alukin@gmail.com
@@ -215,6 +217,14 @@ public class ExtCertTest {
         boolean expResult = false;
         boolean result = acert.isValid(date);
         assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testValidityPeriodIncludesBoundaryInstants() {
+        assertTrue(acert.isValid(acert.getCertificate().getNotBefore()));
+        assertTrue(acert.isValid(acert.getCertificate().getNotAfter()));
+        assertFalse(acert.isValid(new Date(acert.getCertificate().getNotBefore().getTime() - 1)));
+        assertFalse(acert.isValid(new Date(acert.getCertificate().getNotAfter().getTime() + 1)));
     }
 
     /**

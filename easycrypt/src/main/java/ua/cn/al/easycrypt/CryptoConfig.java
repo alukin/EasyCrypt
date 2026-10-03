@@ -97,7 +97,7 @@ public class CryptoConfig {
                 .digester("SHA-512")
                 .signatureAlgorythm("SHA512withECDSA")
                 .keyDerivationFn("PBKDF2WithHmacSHA256") //produces 256 bit key
-                .pbkdf2Iterations(16)
+                .pbkdf2Iterations(CryptoParams.PBKDF2_ITERATIONS)
                 .gcmAuthTagLenBits(128)
                 .aesIvLen(12) //12 bytes
                 .iesIvLen(16) //16 bytes
@@ -120,7 +120,7 @@ public class CryptoConfig {
                 .asymCipher("AES/GCM/NoPadding")
                 .asymIesCipher("RSA/ECB/PKCS1Padding")
                 .keyDerivationFn("PBKDF2WithHmacSHA256") //produces 256 bit key
-                .pbkdf2Iterations(16)
+                .pbkdf2Iterations(CryptoParams.PBKDF2_ITERATIONS)
                 .gcmAuthTagLenBits(128)
                 .aesIvLen(12) //12 bytes
                 .iesIvLen(16) //16 bytes
@@ -151,7 +151,7 @@ public class CryptoConfig {
                 .digester("SHA-256")
                 .signatureAlgorythm("SHA256withECDSA")
                 .keyDerivationFn("PBKDF2WithHmacSHA256") //produces 256 bit key
-                .pbkdf2Iterations(16)
+                .pbkdf2Iterations(CryptoParams.PBKDF2_ITERATIONS)
                 .gcmAuthTagLenBits(128)
                 .aesIvLen(12) //12 bytes
                 .iesIvLen(16) //16 bytes
@@ -173,7 +173,7 @@ public class CryptoConfig {
                 .digester("SHA-256")
                 .signatureAlgorythm("SHA256withECDSA")
                 .keyDerivationFn("PBKDF2WithHmacSHA256") //produces 256 bit key
-                .pbkdf2Iterations(16)
+                .pbkdf2Iterations(CryptoParams.PBKDF2_ITERATIONS)
                 .gcmAuthTagLenBits(128)
                 .aesIvLen(12) //12 bytes
                 .iesIvLen(16) //16 bytes

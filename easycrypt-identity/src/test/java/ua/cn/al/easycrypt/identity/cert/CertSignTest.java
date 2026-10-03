@@ -86,4 +86,17 @@ public class CertSignTest {
         Assertions.assertEquals(signer_attr.geteMail(), cert_attr.geteMail(), "Cert is not self-signed");
         Assertions.assertTrue(sscert.isSignedBy(sscert.getCertificate()),"Cert is not self-signed");         
     }
+
+    @Test
+    public void testPrivateKeyMatchesCertificate() {
+        Assertions.assertTrue(acert.checkKeys(pvtKey));
+        Assertions.assertFalse(sscert.checkKeys(pvtKey));
+        Assertions.assertFalse(acert.checkKeys(null));
+    }
+
+    @Test
+    public void testIssuerNameMustMatchSignerCertificate() {
+        Assertions.assertFalse(acert.isSignedBy(sscert.getCertificate()));
+        Assertions.assertFalse(acert.isSignedBy(null));
+    }
 }

@@ -18,6 +18,11 @@ package ua.cn.al.easycrypt;
 
 
 import java.security.MessageDigest;
+import java.util.Arrays;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
 /**
  * Interface to digesters
@@ -78,5 +83,57 @@ public interface Digester {
     */
    byte[] sha3_512 (byte[] message)throws CryptoNotValidException;
    
+   /**
+    * Derives a key using the historical EasyCrypt settings. Retained for
+    * compatibility with existing data; use {@link #deriveKeyFromPassPhrase}
+    * for new data.
+    *
+    * @deprecated This uses only 16 iterations and must not be used for new keys.
+    */
+   @Deprecated
    byte[] PBKDF2(String passPhrase, byte[] salt) throws CryptoNotValidException;
+
+   /**
+    * Derives a new key using this instance's configured PBKDF2 work factor.
+    * The caller must retain the salt and iteration count with the ciphertext.
+    *
+    * @param passPhrase passphrase to derive from
+    * @param salt unique random salt of at least 16 bytes
+    * @return derived AES key
+    */
+   default byte[] deriveKeyFromPassPhrase(String passPhrase, byte[] salt) throws CryptoNotValidException {
+      return deriveKeyFromPassPhrase(passPhrase, salt, CryptoParams.PBKDF2_ITERATIONS);
+   }
+
+   /**
+    * Derives a new key with an explicit work factor. Store the iteration count
+    * with the salt so the same key can be derived later.
+    */
+   default byte[] deriveKeyFromPassPhrase(String passPhrase, byte[] salt, int iterations) throws CryptoNotValidException {
+      if (passPhrase == null || passPhrase.isEmpty()) {
+         throw new CryptoNotValidException("Passphrase must not be null or empty");
+      }
+      if (salt == null || salt.length < CryptoParams.PBKDF2_SALT_LEN_BYTES) {
+         throw new CryptoNotValidException("PBKDF2 salt must be at least "
+                 + CryptoParams.PBKDF2_SALT_LEN_BYTES + " bytes");
+      }
+      if (iterations < CryptoParams.PBKDF2_ITERATIONS) {
+         throw new CryptoNotValidException("PBKDF2 iteration count must be at least "
+                 + CryptoParams.PBKDF2_ITERATIONS);
+      }
+      char[] password = passPhrase.toCharArray();
+      PBEKeySpec spec = null;
+      try {
+         spec = new PBEKeySpec(password, salt, iterations, CryptoParams.PBKDF2_KEYELEN);
+         SecretKeyFactory factory = SecretKeyFactory.getInstance(CryptoParams.PBKDF2_KEY_DERIVATION_FN);
+         return factory.generateSecret(spec).getEncoded();
+      } catch (NoSuchAlgorithmException | InvalidKeySpecException ex) {
+         throw new CryptoNotValidException("Unable to derive PBKDF2 key", ex);
+      } finally {
+         if (spec != null) {
+            spec.clearPassword();
+         }
+         Arrays.fill(password, '\0');
+      }
+   }
 }
